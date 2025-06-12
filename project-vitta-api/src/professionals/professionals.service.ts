@@ -4,15 +4,19 @@ import { createProvidersDto } from './dtos/createProviders.dto';
 
 @Injectable()
 export class ProvidersService {
-
+    
     constructor(private providersRepository: ProvidersRepository) {}
-
+    
     getProviders() {
         return this.providersRepository.getProviders();
     }
-  
-    createProfessional(provider: createProvidersDto) {
-        return this.providersRepository.createProviders(provider);
+    
+    getProvidersById(id: string) {
+      return this.providersRepository.getProvidersById(id);
+    }
+
+    createProviders(providers: createProvidersDto) {
+        return this.providersRepository.createProviders(providers);
     }
 
 }

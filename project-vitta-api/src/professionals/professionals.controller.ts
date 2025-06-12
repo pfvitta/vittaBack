@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common';
 import { ProvidersService } from './professionals.service';
 import { createProvidersDto } from './dtos/createProviders.dto';
 
@@ -11,9 +11,14 @@ export class ProvidersController {
     return this.providersService.getProviders();
   }
 
-  @Post()
-  createProfessional(@Body() provider: createProvidersDto) {
-    return this.providersService.createProfessional(provider);
+  @Get(':id')
+  getUsersById(@Param('id', ParseUUIDPipe) id: string){
+    return this.providersService.getProvidersById(id);
+  }
+
+  @Post('register')
+  createProviders(@Body() providers: createProvidersDto) {
+    return this.providersService.createProviders(providers);
   }
 
 
