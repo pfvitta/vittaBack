@@ -4,6 +4,10 @@ import { CreateUsersDto } from "./dtos/CreateUsers.dto";
 
 @Injectable()
 export class UsersRepository {
+    
+    getUsers() {
+        return 'Lista de usuarios';
+    }
 
     // constructor(
     //     @InjectRepository(Users) private readonly usersRepository: Repository<Users>
