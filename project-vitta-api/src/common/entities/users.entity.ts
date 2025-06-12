@@ -59,7 +59,7 @@ export class User {
   fechaNacimiento: Date;
 
   // Estado del usuario (activo o no)
-  @Column({ type: 'boolean', nullable: false })
+  @Column({ type: 'boolean', nullable: false, default: true })
   activo: boolean;
 
   // Fecha de creación del registro (generado automáticamente)
