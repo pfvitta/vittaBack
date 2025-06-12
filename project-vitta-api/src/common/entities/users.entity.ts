@@ -5,6 +5,11 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+/**
+ * Entidad para usuarios del sistema
+ * Contiene información personal, credenciales y documentos de identificación
+ */
+
 @Entity({
   name: 'users',
 })

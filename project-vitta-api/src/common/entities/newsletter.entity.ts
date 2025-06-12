@@ -5,6 +5,11 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+/**
+ * Entidad para suscriptores de newsletter
+ * Registra correos electrónicos para envío de boletines informativos
+ */
+
 @Entity({
   name: 'newsletters',
 })
@@ -13,11 +18,11 @@ export class Newsletter {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  // Correo electrónico único
+  // Email del suscriptor (único en el sistema)
   @Column({ type: 'varchar', length: 100, nullable: false, unique: true })
   email: string;
 
-  // Fecha y hora de suscripción, se registra automáticamente
+  // Fecha-hora de suscripción, se registra automáticamente
   @CreateDateColumn()
   subscriptionDate: Date;
 }

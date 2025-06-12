@@ -1,5 +1,10 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+/**
+ * Entidad que gestiona las membresías de pacientes
+ * Registra suscripciones con sus características y vigencia
+ */
+
 @Entity({ name: 'memberships' })
 export class Membership {
   // ID único de la membresía
@@ -28,5 +33,5 @@ export class Membership {
 
   // Valor pagado por la membresía
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
-  amount: number;
+  price: number;
 }

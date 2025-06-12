@@ -3,6 +3,11 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity({
   name: 'professional_profiles',
 })
+
+/**
+ * Perfil profesional de usuarios del sistema
+ * Contiene información de validación y credenciales profesionales
+ */
 export class ProfessionalProfile {
   // ID único autogenerado
   @PrimaryGeneratedColumn('uuid')

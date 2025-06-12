@@ -1,6 +1,11 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({ name: 'appointments' }) // nombre en snake_case, plural
+/**
+ * Entidad que representa las citas médicas del sistema
+ * Registra las reservas de turnos entre pacientes y profesionales
+ */
+
+@Entity({ name: 'appointments' })
 export class Appointment {
   // ID único del turno
   @PrimaryGeneratedColumn('uuid')
@@ -18,11 +23,11 @@ export class Appointment {
   @Column({ type: 'date', nullable: false })
   date: Date;
 
-  // Hora agendada del turno (como string en formato HH:mm)
+  // Hora del turno (HH:mm)
   @Column({ type: 'time', nullable: false })
   time: string;
 
-  // Estado del turno (ej: 'pendiente', 'confirmado', 'cancelado')
+  // Estado actual de la cita: 'pending'|'confirmed'|'cancelled'|'completed'
   @Column({ type: 'varchar', length: 10 })
   status: string;
 }

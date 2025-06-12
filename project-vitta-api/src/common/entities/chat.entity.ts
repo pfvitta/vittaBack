@@ -5,6 +5,11 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+/**
+ * Registro de conversación entre paciente y profesional
+ * Almacena los metadatos básicos de cada chat creado
+ */
+
 @Entity({ name: 'chats' })
 export class Chat {
   // ID único del chat
