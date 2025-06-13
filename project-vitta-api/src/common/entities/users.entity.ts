@@ -30,9 +30,13 @@ export class User {
   @Column({ type: 'varchar', length: 180, nullable: false })
   password: string;
 
-  // Rol del usuario (ej: admin, nutricionista, user)
-  @Column({ type: 'varchar', length: 11, nullable: false })
-  rol: string;
+  // Contraseña hasheada (bcrypt genera hasta 60 caracteres)
+  @Column({ type: 'varchar', length: 180, nullable: false })
+  validatePassword: string;
+
+  // Numero de teléfono celular
+  @Column({ length: 15, nullable: false })
+  phone: string;
 
   // Tipo de documento (ej: CC, CE, TI)
   @Column({ type: 'varchar', length: 10, nullable: false })
@@ -65,4 +69,8 @@ export class User {
   // Fecha de creación del registro (generado automáticamente)
   @CreateDateColumn()
   creadoEn: Date;
+
+  // Rol del usuario (ej: admin, nutricionista, user)
+  @Column({ type: 'varchar', length: 11, nullable: false })
+  rol: string;
 }
