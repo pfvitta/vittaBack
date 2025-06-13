@@ -13,7 +13,7 @@ export class ProfessionalProfile {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  // ID del usuario relacionado
+  // ID del usuario relacionado 
   @Column({ type: 'uuid', nullable: false })
   usuarioId: string;
 

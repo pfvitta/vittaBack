@@ -1,9 +1,13 @@
 import { Module } from '@nestjs/common';
-import { ProfessionalsService } from './professionals.service';
-import { ProfessionalsController } from './professionals.controller';
+import { ProvidersService } from './professionals.service';
+import { ProvidersController } from './professionals.controller';
+import { ProvidersRepository } from './professionals.repository';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ProfessionalProfile } from '../common/entities/professionalProfile.entity'; 
 
 @Module({
-  controllers: [ProfessionalsController],
-  providers: [ProfessionalsService],
+  imports : [TypeOrmModule.forFeature([ProfessionalProfile])],
+  controllers: [ProvidersController],
+  providers: [ProvidersService, ProvidersRepository],
 })
 export class ProfessionalsModule {}
