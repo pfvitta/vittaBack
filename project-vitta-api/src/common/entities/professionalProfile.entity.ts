@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from './users.entity';
 
 @Entity({
   name: 'professional_profiles',
@@ -13,35 +20,31 @@ export class ProfessionalProfile {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  // ID del usuario relacionado 
-  @Column({ type: 'uuid', nullable: false })
-  usuarioId: string;
+  @OneToOne(() => User, (user) => user.professionalProfile)
+  @JoinColumn()
+  user: User;
 
   // Biografía del profesional
   @Column({ type: 'text', nullable: false })
-  biografia: string;
+  biography: string;
 
-  // ¿Fue validado manualmente?
+  // Validacion de documentos
   @Column({ type: 'boolean', default: false })
-  validado: boolean;
+  verified: boolean;
 
-  // ID  del validador (admin)
-  @Column({ type: 'uuid', nullable: false })
-  verificadoPor: string;
+  // ID del validador (admin)
+  @Column({ type: 'uuid', nullable: true })
+  verifiedBy: string;
 
   // Experiencia profesional (texto libre)
   @Column({ type: 'text', nullable: false })
-  experiencia: string;
+  experience: string;
 
-  // Precio por consulta (guardado como número)
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
-  precioConsulta: number;
-
-  // URL frontal de la tarjeta profesional
+  // numero de la tarjeta profesional
   @Column({ type: 'varchar', nullable: false })
-  tarjetaProfesionalFrontalUrl: string;
+  licenseNumber: string;
 
-  // URL trasera de la tarjeta profesional
-  @Column({ type: 'varchar', nullable: false })
-  tarjetaProfesionalTraseraUrl: string;
+  // ID de la especialidad
+  @Column({ type: 'uuid', nullable: false })
+  specialtyId: string;
 }

@@ -31,10 +31,6 @@ export class MembershipPayment {
   paymentDate: Date;
 
   // Método utilizado para el pago
-  @Column({
-    type: 'varchar',
-    length: 15,
-    nullable: false,
-  })
+  @Column({ type: 'varchar', length: 15, nullable: false })
   paymentMethod: string;
 }

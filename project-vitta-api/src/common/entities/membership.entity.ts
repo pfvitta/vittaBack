@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from './users.entity';
 
 /**
  * Entidad que gestiona las membresías de pacientes
@@ -11,9 +18,9 @@ export class Membership {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  // ID del paciente que adquiere la membresía
-  @Column({ type: 'uuid', nullable: false })
-  userId: string;
+  @OneToOne(() => User, (user) => user.membership)
+  @JoinColumn()
+  user: User;
 
   // Tipo de membresía (ej: 'mensual', 'premium')
   @Column({ type: 'varchar', length: 20, nullable: false })

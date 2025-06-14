@@ -5,7 +5,6 @@ import {
   Length,
   IsPhoneNumber,
   IsDateString,
-  IsBoolean,
   Matches,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
@@ -56,17 +55,6 @@ export class CreateUserDto {
   phone: string;
 
   @ApiProperty({
-    example: 'CC',
-    description: 'Tipo de documento: CC, CE, TI, etc.',
-  })
-  @IsNotEmpty({ message: 'El tipo de documento es obligatorio' })
-  @IsString({ message: 'El tipo de documento debe ser texto' })
-  @Length(2, 10, {
-    message: 'El tipo de documento debe tener entre 2 y 10 caracteres',
-  })
-  tipoDocumento: string;
-
-  @ApiProperty({
     example: '1234567890',
     description: 'Número de documento único (5 a 10 dígitos)',
   })
@@ -74,32 +62,16 @@ export class CreateUserDto {
   @Matches(/^\d{5,10}$/, {
     message: 'El número de documento debe tener entre 5 y 10 dígitos',
   })
-  numeroDocumento: string;
-
-  @ApiProperty({
-    example: 'https://s3.com/documento_frente.jpg',
-    description: 'URL de la imagen frontal del documento',
-  })
-  @IsNotEmpty({ message: 'La URL del documento frontal es obligatoria' })
-  @IsString({ message: 'Debe ser una URL válida' })
-  documentoFrontalUrl: string;
-
-  @ApiProperty({
-    example: 'https://s3.com/documento_reverso.jpg',
-    description: 'URL de la imagen trasera del documento',
-  })
-  @IsNotEmpty({ message: 'La URL del documento trasero es obligatoria' })
-  @IsString({ message: 'Debe ser una URL válida' })
-  documentoTraseroUrl: string;
+  dni: string;
 
   @ApiProperty({
     example: 'Bogotá',
-    description: 'Ciudad o lugar de expedición del documento',
+    description: 'Ciudad de recidencia',
   })
-  @IsNotEmpty({ message: 'El lugar de expedición es obligatorio' })
-  @IsString({ message: 'El lugar de expedición debe ser texto' })
-  @Length(2, 40, { message: 'Debe tener entre 2 y 40 caracteres' })
-  lugarExpedicion: string;
+  @IsNotEmpty({ message: 'La ciudad de residencia es obligatorio' })
+  @IsString({ message: 'La ciudad de residencia debe ser texto' })
+  @Length(2, 50, { message: 'Debe tener entre 2 y 50 caracteres' })
+  city: string;
 
   @ApiProperty({
     example: '1993-08-15',
@@ -107,21 +79,13 @@ export class CreateUserDto {
   })
   @IsNotEmpty({ message: 'La fecha de nacimiento es obligatoria' })
   @IsDateString({}, { message: 'Debe ser una fecha válida (YYYY-MM-DD)' })
-  fechaNacimiento: Date;
-
-  @ApiProperty({
-    example: true,
-    description: 'Estado activo del usuario (true o false)',
-  })
-  @IsBoolean({ message: 'El estado activo debe ser verdadero o falso' })
-  @IsNotEmpty({ message: 'El estado activo es obligatorio' })
-  activo: boolean;
+  dob: Date;
 
   @ApiProperty({
     example: 'user',
-    description: 'Rol del usuario (ej: admin, nutricionista, user)',
+    description: 'Rol del usuario (ej: admin, profesional, user)',
   })
   @IsNotEmpty({ message: 'El rol es obligatorio' })
   @IsString({ message: 'El rol debe ser una cadena de texto' })
-  rol: string;
+  role: string;
 }

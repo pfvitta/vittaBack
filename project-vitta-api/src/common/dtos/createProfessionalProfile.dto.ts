@@ -1,23 +1,7 @@
-import {
-  IsNotEmpty,
-  IsUUID,
-  IsString,
-  IsBoolean,
-  IsNumber,
-  IsUrl,
-  Length,
-} from 'class-validator';
+import { IsNotEmpty, IsString, Length } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateProfessionalProfileDto {
-  @ApiProperty({
-    example: '88b9c4b1-e7d2-4c15-a8df-92f1eeb8a55e',
-    description: 'UUID v4 del usuario que crea el perfil profesional',
-  })
-  @IsNotEmpty({ message: 'El ID del usuario es obligatorio' })
-  @IsUUID('4', { message: 'Debe ser un UUID versión 4 válido' })
-  usuarioId: string;
-
   @ApiProperty({
     example:
       'Nutricionista con 10 años de experiencia en pacientes diabéticos.',
@@ -28,22 +12,7 @@ export class CreateProfessionalProfileDto {
   @Length(10, 1000, {
     message: 'La biografía debe tener entre 10 y 1000 caracteres',
   })
-  biografia: string;
-
-  @ApiProperty({
-    example: false,
-    description: 'Indica si el perfil fue validado manualmente',
-  })
-  @IsBoolean({ message: 'El valor de validado debe ser booleano' })
-  validado: boolean;
-
-  @ApiProperty({
-    example: 'b5a02a7f-508d-4451-83b6-4d42fa515b12',
-    description: 'UUID v4 del administrador que validó el perfil',
-  })
-  @IsNotEmpty({ message: 'El ID del validador es obligatorio' })
-  @IsUUID('4', { message: 'Debe ser un UUID versión 4 válido' })
-  verificadoPor: string;
+  biography: string;
 
   @ApiProperty({
     example:
@@ -52,32 +21,26 @@ export class CreateProfessionalProfileDto {
   })
   @IsNotEmpty({ message: 'La experiencia es obligatoria' })
   @IsString({ message: 'La experiencia debe ser texto' })
-  @Length(10, 1000, {
+  @Length(10, 500, {
     message: 'La experiencia debe tener entre 10 y 1000 caracteres',
   })
-  experiencia: string;
+  experience: string;
 
   @ApiProperty({
-    example: 85000,
-    description: 'Precio por consulta en pesos colombianos',
+    description: 'Número de matrícula profesional',
+    example: 'AB-12345',
+    required: false,
   })
-  @IsNotEmpty({ message: 'El precio por consulta es obligatorio' })
-  @IsNumber({}, { message: 'El precio debe ser un número' })
-  precioConsulta: number;
+  @IsString({ message: 'El número de matrícula debe ser una cadena de texto.' })
+  @Length(6, 20, {
+    message: 'El número de matrícula debe tener entre 6 y 20 caracteres.',
+  })
+  licenseNumber?: string;
 
   @ApiProperty({
-    example: 'https://cdn.example.com/docs/tarjeta_frente.jpg',
-    description: 'URL frontal de la tarjeta profesional',
+    description: 'Área de especialización',
+    example: 'DIABETES',
   })
-  @IsNotEmpty({ message: 'La URL frontal de la tarjeta es obligatoria' })
-  @IsUrl({}, { message: 'Debe ser una URL válida' })
-  tarjetaProfesionalFrontalUrl: string;
-
-  @ApiProperty({
-    example: 'https://cdn.example.com/docs/tarjeta_trasera.jpg',
-    description: 'URL trasera de la tarjeta profesional',
-  })
-  @IsNotEmpty({ message: 'La URL trasera de la tarjeta es obligatoria' })
-  @IsUrl({}, { message: 'Debe ser una URL válida' })
-  tarjetaProfesionalTraseraUrl: string;
+  @IsString({ message: 'La especialidad debe ser un texto válido' })
+  specialty?: string;
 }

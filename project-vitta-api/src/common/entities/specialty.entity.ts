@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from './users.entity';
 
 /**
  * Entidad para especialidades médicas/profesionales
@@ -17,7 +24,7 @@ export class Specialty {
   @Column({ type: 'varchar', length: 100, nullable: false, unique: true })
   name: string;
 
-  // Descripción detallada de la especialidad
-  @Column({ type: 'text', nullable: false })
-  description: string;
+  @ManyToOne(() => User, (user) => user.specialty)
+  @JoinColumn()
+  user: User;
 }
