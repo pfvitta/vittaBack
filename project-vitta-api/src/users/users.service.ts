@@ -14,7 +14,7 @@ export class UsersService {
     return this.usersRepository.getUsers();
   }
 
-  async createUser(user: CreateAccountDto) {
+  createUser(user: CreateAccountDto) {
     return this.usersRepository.createUser(user);
   }
 }
