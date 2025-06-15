@@ -5,7 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from './users.entity';
+import { ProfessionalProfile } from './professionalProfile.entity';
 
 /**
  * Entidad para especialidades médicas/profesionales
@@ -24,7 +24,10 @@ export class Specialty {
   @Column({ type: 'varchar', length: 100, nullable: false, unique: true })
   name: string;
 
-  @ManyToOne(() => User, (user) => user.specialty)
+  @ManyToOne(
+    () => ProfessionalProfile,
+    (professionalProfile) => professionalProfile.specialty,
+  )
   @JoinColumn()
-  user: User;
+  professionalProfile: ProfessionalProfile;
 }

@@ -1,6 +1,13 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+} from '@nestjs/common';
 import { ProvidersService } from './professionals.service';
-import { createProvidersDto } from './dtos/createProviders.dto';
+import { CreateAccountDto } from 'src/common/dtos/createAccount.dto';
 
 @Controller('providers')
 export class ProvidersController {
@@ -12,14 +19,12 @@ export class ProvidersController {
   }
 
   @Get(':id')
-  getUsersById(@Param('id', ParseUUIDPipe) id: string){
+  getUsersById(@Param('id', ParseUUIDPipe) id: string) {
     return this.providersService.getProvidersById(id);
   }
 
   @Post('register')
-  createProviders(@Body() providers: createProvidersDto) {
+  createProviders(@Body() providers: CreateAccountDto) {
     return this.providersService.createProviders(providers);
   }
-
-
 }

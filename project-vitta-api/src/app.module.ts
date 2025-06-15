@@ -10,12 +10,15 @@ import { AdminModule } from './admin/admin.module';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import typeOrmConfig from './config/typeorm';
+import { JwtModule } from '@nestjs/jwt';
+import { validationSchema } from './config/validation';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       load: [typeOrmConfig],
+      validationSchema,
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
@@ -24,6 +27,12 @@ import typeOrmConfig from './config/typeorm';
         if (!dbConfig) throw new Error('Database configuration is missing');
         return dbConfig;
       },
+    }),
+
+    JwtModule.register({
+      global: true,
+      signOptions: { expiresIn: '15m' },
+      secret: process.env.JWT_SECRET,
     }),
     AuthModule,
     UsersModule,

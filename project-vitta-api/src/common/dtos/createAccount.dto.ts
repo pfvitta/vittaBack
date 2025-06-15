@@ -9,6 +9,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Specialty } from '../entities/specialty.entity';
 
 export class CreateAccountDto {
   // ==== Campos comunes para todos los usuarios ====
@@ -48,10 +49,10 @@ export class CreateAccountDto {
   })
   validatePassword: string;
 
-  @ApiProperty({ example: '+49123456789' })
+  @ApiProperty({ example: '+573001112233' })
   @IsNotEmpty({ message: 'El número de teléfono es obligatorio' })
-  @IsPhoneNumber(undefined, {
-    message: 'Debe ser un número de teléfono válido',
+  @IsPhoneNumber('CO', {
+    message: 'Debe ser un número de teléfono colombiano válido',
   })
   phone: string;
 
@@ -122,6 +123,9 @@ export class CreateAccountDto {
     example: 'DIABETES',
   })
   @IsOptional()
-  @IsString({ message: 'La especialidad debe ser un texto válido' })
-  specialty?: string;
+  @IsString({
+    each: true,
+    message: 'Cada especialidad debe ser un texto válido',
+  })
+  specialty?: Specialty[];
 }

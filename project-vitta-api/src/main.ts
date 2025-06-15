@@ -3,13 +3,13 @@ import { AppModule } from './app.module';
 import { LoggerGlobal } from './common/middleware/logger.middleware';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
-import { AuthGuard } from './common/guards/auth.guard';
+//import { AuthGuard } from './common/guards/auth.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(LoggerGlobal);
 
-  app.useGlobalGuards(new AuthGuard());
+  //app.useGlobalGuards(new AuthGuard());
 
   app.useGlobalPipes(
     new ValidationPipe({
