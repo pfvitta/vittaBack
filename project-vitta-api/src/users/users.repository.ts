@@ -39,6 +39,7 @@ export class UsersRepository {
         return 'User not found';
     }
 
+    // Crea un usuario en general y si es profesional, crea su perfil profesional
     async createUser(users: CreateAccountDto): Promise<string | Omit<CreateAccountDto, "password">> {
         const existe = await this.usersRepository.findOne({
             where: { email: users.email }
@@ -67,21 +68,13 @@ export class UsersRepository {
 
         // Si el usuario es profesional, guardar su perfil profesional
         if (users.role === 'profesional') {
-            
-            // las siguientes 2 lineas son para evitar que se guarde un campo undefined en la base de datos
-            // Hay que poner un valor por defecto desde el front
-            // Una vez que se tenga el front, se puede eliminar estas 2 lineas
-            if (users.biography === undefined) users.biography = ''; //Hay que poner un valor por defecto desde el front
-            if (users.experience === undefined) users.experience = ''; //Hay que poner un valor por defecto desde el front
-            //-----------------------------------------------------------------------------
-
             const profesionalProfile: CreateProfessionalProfileDto = {
-                biography: users.biography,
-                experience: users.experience,
+                biography: users.biography || '', // Asignar un valor por defecto si es undefined
+                experience: users.experience || '', // Asignar un valor por defecto si es undefined
                 licenseNumber: users.licenseNumber,
                 specialty: users.specialty
             }
-        await this.professionalProfileRepository.save(profesionalProfile);
+            await this.professionalProfileRepository.save(profesionalProfile);
         }
 
         // Excluir el campo 'password' del objeto de usuario
