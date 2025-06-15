@@ -6,10 +6,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../common/entities/users.entity';
 import { Membership } from '../common/entities/membership.entity';
 import { Specialty } from '../common/entities/specialty.entity';
+import { ProfessionalProfile } from 'src/common/entities/professionalProfile.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Membership, Specialty])],
+  imports: [
+    TypeOrmModule.forFeature([
+      User,
+      ProfessionalProfile,
+      Membership,
+      Specialty,
+    ]),
+  ],
   controllers: [UsersController],
   providers: [UsersService, UsersRepository],
+  exports: [UsersService],
 })
 export class UsersModule {}

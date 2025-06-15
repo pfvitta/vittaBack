@@ -31,7 +31,7 @@ export class AuthService {
       throw new NotFoundException('Usuario y Password no son validos');
     }
 
-    // Genracion del token
+    // Genracion del token.
 
     const userPayload = {
       sub: validateEmail.id,

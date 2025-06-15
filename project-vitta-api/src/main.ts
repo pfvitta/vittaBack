@@ -35,7 +35,7 @@ async function bootstrap() {
     .setTitle('Vitta API')
     .setDescription('Documentación de la API para el sistema Vitta')
     .setVersion('1.0')
-    //.addBearerAuth()
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);

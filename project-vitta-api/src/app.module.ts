@@ -28,12 +28,16 @@ import { validationSchema } from './config/validation';
         return dbConfig;
       },
     }),
-
-    JwtModule.register({
+    JwtModule.registerAsync({
       global: true,
-      signOptions: { expiresIn: '15m' },
-      secret: process.env.JWT_SECRET,
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '1h' },
+      }),
     }),
+
     AuthModule,
     UsersModule,
     ProfessionalsModule,
