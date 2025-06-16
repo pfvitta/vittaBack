@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 import { ProfessionalProfile } from "src/common/entities/professionalProfile.entity";
 import { CreateUserDto } from '../common/dtos/createUser.dto';
 import { CreateProfessionalProfileDto } from "../common/dtos/createProfessionalProfile.dto";
+import { access } from "fs";
 
 @Injectable()
 export class UsersRepository {
@@ -29,7 +30,7 @@ export class UsersRepository {
         
         const user = await this.usersRepository.findOne({
             where: { id },
-            relations: ['professionalProfile'] // Asegurarse de incluir la relación con el perfil profesional si es necesario
+            relations: ['professionalProfile', 'membership'] // Asegurarse de incluir las relaciones con el perfil profesional y la membresía si es necesario
         });
 
         if (user) {
@@ -41,18 +42,24 @@ export class UsersRepository {
 
     // Crea un usuario en general y si es profesional, crea su perfil profesional
     async createUser(users: CreateAccountDto): Promise<string | Omit<CreateAccountDto, "password">> {
-        const existe = await this.usersRepository.findOne({
+        const existeEmail = await this.usersRepository.findOne({
             where: { email: users.email }
         });
-        if (existe) {
-            throw new BadRequestException('Este email ya está en uso');
-        }
+        if (existeEmail) throw new BadRequestException('Este email ya está en uso');
+
+        const existeDni = await this.usersRepository.findOne({
+            where: { dni: users.dni }
+        });
+
+        if (existeDni) throw new BadRequestException('Este dni ya está en uso');
+        
         const hashedPassword = await bcrypt.hash(users.password, 10);
         if (!hashedPassword) {
             throw new BadRequestException('Error al tratar de crear el usuario. Intente nuevamente');
         }
 
-        const user: CreateUserDto = {
+        //Cuando se arregle el objeto CreateUserDto, se asignará el tipo de variable 'user' para que sea un objeto de tipo CreateUserDto
+        const user:any = {
             name: users.name,
             email: users.email,
             password: users.password,
@@ -60,20 +67,34 @@ export class UsersRepository {
             dni: users.dni,
             city: users.city,
             dob: users.dob,
+            createdAt: new Date(), // Asignar la fecha actual
+            status: 'activo', // Asignar un valor por defecto
             role: users.role
         }
 
         // Guardar el usuario en la base de datos
-        await this.usersRepository.save({ ...user, password: hashedPassword});
+        const savedUser = await this.usersRepository.save({ ...user, password: hashedPassword});
 
         // Si el usuario es profesional, guardar su perfil profesional
-        if (users.role === 'profesional') {
-            const profesionalProfile: CreateProfessionalProfileDto = {
+        if (users.role === 'provider') {
+            const userprof = await this.usersRepository.findOne({
+                where: {email: users.email},
+                select: ['id'] // Seleccionar solo el campo 'id' para evitar cargar todo el objeto
+            });
+            if (!userprof) {
+                throw new BadRequestException('Error al crear el perfil profesional. Usuario no encontrado');
+            }
+
+            // Cuando se arregle el objeto CreateProfessionalProfileDto, se asignará el tipo de variable 'profesionalProfile' para que sea un objeto de tipo CreateProfessionalProfileDto
+            const profesionalProfile: any = {
                 biography: users.biography || '', // Asignar un valor por defecto si es undefined
+                verified: false, // Asignar un valor por defecto
                 experience: users.experience || '', // Asignar un valor por defecto si es undefined
                 licenseNumber: users.licenseNumber,
-                specialty: users.specialty
+                specialtyId: users.specialty,
+                user : savedUser// Asignar el ID del usuario creado
             }
+
             await this.professionalProfileRepository.save(profesionalProfile);
         }
 
