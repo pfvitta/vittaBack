@@ -4,17 +4,17 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { User } from "../common/entities/users.entity";
 import * as bcrypt from 'bcrypt';
-import { ProfessionalProfile } from "src/common/entities/professionalProfile.entity";
-import { CreateUserDto } from '../common/dtos/createUser.dto';
-import { CreateProfessionalProfileDto } from "../common/dtos/createProfessionalProfile.dto";
-import { access } from "fs";
+import { ProfessionalProfile } from "../common/entities/professionalProfile.entity";
+import { Specialty } from "../common/entities/specialty.entity";
 
 @Injectable()
 export class UsersRepository {
     
     constructor(
         @InjectRepository(User) private readonly usersRepository: Repository<User>,
-        @InjectRepository(ProfessionalProfile) private readonly professionalProfileRepository: Repository<ProfessionalProfile>
+        @InjectRepository(ProfessionalProfile) private readonly professionalProfileRepository: Repository<ProfessionalProfile>,
+        @InjectRepository(Specialty) private readonly specialtyRepository: Repository<Specialty>
+        
     ) {}
     
     async getUsers(): Promise<Omit<User, "password">[]> {
@@ -33,27 +33,16 @@ export class UsersRepository {
             relations: ['professionalProfile', 'membership'] // Asegurarse de incluir las relaciones con el perfil profesional y la membresía si es necesario
         });
 
-    // Guardar el usuario en la base de datos
-    await this.usersRepository.save({ ...user, password: hashedPassword });
+        if (!user) {
+            throw new BadRequestException('Usuario no encontrado');
+        }
 
-    // Si el usuario es profesional, guardar su perfil profesional
-    if (users.role === 'profesional') {
-      const profesionalProfile: CreateProfessionalProfileDto = {
-        biography: users.biography || '', // Asignar un valor por defecto si es undefined
-        experience: users.experience || '', // Asignar un valor por defecto si es undefined
-        licenseNumber: users.licenseNumber,
-        specialty: users.specialty,
-      };
-      await this.professionalProfileRepository.save(profesionalProfile);
+        // Excluir el campo 'password' del objeto de usuario
+        const { password, ...userWithoutPassword } = user;
+        return userWithoutPassword;
     }
 
-<<<<<<< HEAD
-    // Excluir el campo 'password' del objeto de usuario
-    const { password, ...userWithoutPassword } = users;
-    return userWithoutPassword;
-  }
-}
-=======
+
     // Crea un usuario en general y si es profesional, crea su perfil profesional
     async createUser(users: CreateAccountDto): Promise<string | Omit<CreateAccountDto, "password">> {
         const existeEmail = await this.usersRepository.findOne({
@@ -99,13 +88,17 @@ export class UsersRepository {
                 throw new BadRequestException('Error al crear el perfil profesional. Usuario no encontrado');
             }
 
+            if (!Array.isArray(users.specialty) || users.specialty?.length === 0) throw new BadRequestException('Profesional debe tener al menos una especialidad');
+            
+            const specialties: Specialty[]  = await this.mapSpecialtyNamesToIds(users.specialty);
+
             // Cuando se arregle el objeto CreateProfessionalProfileDto, se asignará el tipo de variable 'profesionalProfile' para que sea un objeto de tipo CreateProfessionalProfileDto
             const profesionalProfile: any = {
                 biography: users.biography || '', // Asignar un valor por defecto si es undefined
                 verified: false, // Asignar un valor por defecto
                 experience: users.experience || '', // Asignar un valor por defecto si es undefined
                 licenseNumber: users.licenseNumber,
-                specialtyId: users.specialty,
+                specialty: specialties, // Asignar las especialidades mapeadas
                 user : savedUser// Asignar el ID del usuario creado
             }
 
@@ -116,6 +109,23 @@ export class UsersRepository {
         const { password, ...userWithoutPassword } = users;
         return userWithoutPassword;
     }
+    
+    async mapSpecialtyNamesToIds(specialtyNames: string[]): Promise<Specialty[]> {
+        const specialtyIds: Specialty[] = [];
+        for (const specialtyName of specialtyNames) {
+            const specialty = await this.specialtyRepository.findOne({
+                where: { name: specialtyName }
+            });
+            if (!specialty) {
+                throw new BadRequestException('Especialidad no encontrada');
+            }
+            specialtyIds.push(specialty);
+        }
+        return specialtyIds;
+    }
 
 }
->>>>>>> 1c2e9b9ce5c58a295575cf723df3f974bab8b1e4
+
+
+
+

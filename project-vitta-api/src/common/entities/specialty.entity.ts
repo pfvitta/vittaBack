@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -24,10 +25,13 @@ export class Specialty {
   @Column({ type: 'varchar', length: 100, nullable: false, unique: true })
   name: string;
 
-  @ManyToOne(
-    () => ProfessionalProfile,
-    (professionalProfile) => professionalProfile.specialty,
-  )
-  @JoinColumn()
-  professionalProfile: ProfessionalProfile;
+  // @ManyToOne(
+  //   () => ProfessionalProfile,
+  //   (professionalProfile) => professionalProfile.specialty,
+  // )
+  // @JoinColumn()
+  // professionalProfile: ProfessionalProfile;
+
+  @ManyToMany(() => ProfessionalProfile, (profile) => profile.specialty)
+  professionalProfiles: ProfessionalProfile[];
 }
