@@ -37,7 +37,7 @@ export class CreateAccountDto {
   })
   password: string;
 
-  @ApiProperty({ example: 'Abcde#123' })
+  /**@ApiProperty({ example: 'Abcde#123' })
   @IsNotEmpty({ message: 'La contraseña es obligatoria' })
   @IsString({ message: 'La contraseña debe ser una cadena de texto' })
   @Length(6, 15, {
@@ -47,7 +47,7 @@ export class CreateAccountDto {
     message:
       'La contraseña debe tener al menos una mayúscula, un número y un carácter especial',
   })
-  validatePassword: string;
+  validatePassword: string; */
 
   @ApiProperty({ example: '+573001112233' })
   @IsNotEmpty({ message: 'El número de teléfono es obligatorio' })
