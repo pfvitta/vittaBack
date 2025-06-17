@@ -9,6 +9,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(LoggerGlobal);
 
+  app.enableCors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  });
+
   //app.useGlobalGuards(new AuthGuard());
 
   app.useGlobalPipes(
@@ -41,6 +46,10 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
 
+<<<<<<< HEAD
   await app.listen(process.env.PORT ?? 3001);
+=======
+  await app.listen(process.env.PORT ?? 4000);
+>>>>>>> origin/dev/camilo
 }
 bootstrap();
