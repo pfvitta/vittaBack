@@ -44,19 +44,23 @@ export class UsersRepository {
 
 
     // Crea un usuario en general y si es profesional, crea su perfil profesional
-    async createUser(users: CreateAccountDto): Promise<string | Omit<CreateAccountDto, "password">> {
+    async createUser(users: any): Promise<any> {//Promise<string | Omit<CreateAccountDto, "password">> {
+    //async createUser(users: CreateAccountDto): Promise<string | Omit<CreateAccountDto, "password">> {
+
+        users =  users.user;
+        
         const existeEmail = await this.usersRepository.findOne({
-            where: { email: users.email }
+            where: { email: users.email } 
         });
-        if (existeEmail) throw new BadRequestException('Este email ya está en uso');
+        if (existeEmail) throw new BadRequestException('Este email ya está en uso'); 
 
         const existeDni = await this.usersRepository.findOne({
             where: { dni: users.dni }
-        });
+        }); 
 
         if (existeDni) throw new BadRequestException('Este dni ya está en uso');
+        const hashedPassword = await bcrypt.hash(users.password, 10); 
         
-        const hashedPassword = await bcrypt.hash(users.password, 10);
         if (!hashedPassword) {
             throw new BadRequestException('Error al tratar de crear el usuario. Intente nuevamente');
         }
@@ -80,6 +84,8 @@ export class UsersRepository {
 
         // Si el usuario es profesional, guardar su perfil profesional
         if (users.role === 'provider') {
+            console.log('Guardando perfil profesional para el usuario:', users.email);
+            console.log('especialidades:', users.specialty);
             const userprof = await this.usersRepository.findOne({
                 where: {email: users.email},
                 select: ['id'] // Seleccionar solo el campo 'id' para evitar cargar todo el objeto
@@ -90,7 +96,19 @@ export class UsersRepository {
 
             if (!Array.isArray(users.specialty) || users.specialty?.length === 0) throw new BadRequestException('Profesional debe tener al menos una especialidad');
             
-            const specialties: Specialty[]  = await this.mapSpecialtyNamesToIds(users.specialty);
+            //-------------
+            const specialtyIds: Specialty[] = [];
+            for (const specialtyName of users.specialty) {
+                const specialty = await this.specialtyRepository.findOne({
+                    where: { name: specialtyName.toUpperCase() },
+                });
+                if (!specialty) {
+                    console.log('Especialidad no encontrada:', specialtyName);
+                    throw new BadRequestException('Especialidad no encontrada'); 
+                }
+            specialtyIds.push(specialty);
+        }
+            //-------------
 
             // Cuando se arregle el objeto CreateProfessionalProfileDto, se asignará el tipo de variable 'profesionalProfile' para que sea un objeto de tipo CreateProfessionalProfileDto
             const profesionalProfile: any = {
@@ -98,7 +116,7 @@ export class UsersRepository {
                 verified: false, // Asignar un valor por defecto
                 experience: users.experience || '', // Asignar un valor por defecto si es undefined
                 licenseNumber: users.licenseNumber,
-                specialty: specialties, // Asignar las especialidades mapeadas
+                specialty: specialtyIds, // Asignar las especialidades mapeadas
                 user : savedUser// Asignar el ID del usuario creado
             }
 
@@ -108,20 +126,6 @@ export class UsersRepository {
         // Excluir el campo 'password' del objeto de usuario
         const { password, ...userWithoutPassword } = users;
         return userWithoutPassword;
-    }
-    
-    async mapSpecialtyNamesToIds(specialtyNames: string[]): Promise<Specialty[]> {
-        const specialtyIds: Specialty[] = [];
-        for (const specialtyName of specialtyNames) {
-            const specialty = await this.specialtyRepository.findOne({
-                where: { name: specialtyName }
-            });
-            if (!specialty) {
-                throw new BadRequestException('Especialidad no encontrada');
-            }
-            specialtyIds.push(specialty);
-        }
-        return specialtyIds;
     }
 
 }

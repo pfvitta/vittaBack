@@ -1,10 +1,5 @@
 import {
-  Body,
   Controller,
-  Get,
-  Param,
-  ParseUUIDPipe,
-  Post,
 } from '@nestjs/common';
 import { ProvidersService } from './professionals.service';
 
