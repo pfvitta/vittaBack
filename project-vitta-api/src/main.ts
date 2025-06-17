@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { LoggerGlobal } from './common/middleware/logger.middleware';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
-import { AuthGuard } from './common/guards/auth.guard';
+//import { AuthGuard } from './common/guards/auth.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -35,12 +35,12 @@ async function bootstrap() {
     .setTitle('Vitta API')
     .setDescription('Documentación de la API para el sistema Vitta')
     .setVersion('1.0')
-    //.addBearerAuth()
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 3001);
 }
 bootstrap();

@@ -33,13 +33,27 @@ export class UsersRepository {
             relations: ['professionalProfile', 'membership'] // Asegurarse de incluir las relaciones con el perfil profesional y la membresía si es necesario
         });
 
-        if (user) {
-          const { password, ...userWithoutPassword } = user; // Excluir el campo 'password'
-            return userWithoutPassword;
-        }        
-        return 'User not found';
+    // Guardar el usuario en la base de datos
+    await this.usersRepository.save({ ...user, password: hashedPassword });
+
+    // Si el usuario es profesional, guardar su perfil profesional
+    if (users.role === 'profesional') {
+      const profesionalProfile: CreateProfessionalProfileDto = {
+        biography: users.biography || '', // Asignar un valor por defecto si es undefined
+        experience: users.experience || '', // Asignar un valor por defecto si es undefined
+        licenseNumber: users.licenseNumber,
+        specialty: users.specialty,
+      };
+      await this.professionalProfileRepository.save(profesionalProfile);
     }
 
+<<<<<<< HEAD
+    // Excluir el campo 'password' del objeto de usuario
+    const { password, ...userWithoutPassword } = users;
+    return userWithoutPassword;
+  }
+}
+=======
     // Crea un usuario en general y si es profesional, crea su perfil profesional
     async createUser(users: CreateAccountDto): Promise<string | Omit<CreateAccountDto, "password">> {
         const existeEmail = await this.usersRepository.findOne({
@@ -104,3 +118,4 @@ export class UsersRepository {
     }
 
 }
+>>>>>>> 1c2e9b9ce5c58a295575cf723df3f974bab8b1e4

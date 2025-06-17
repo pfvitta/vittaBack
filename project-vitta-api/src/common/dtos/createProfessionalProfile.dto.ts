@@ -1,5 +1,6 @@
 import { IsNotEmpty, IsString, Length } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Specialty } from '../entities/specialty.entity';
 
 export class CreateProfessionalProfileDto {
   @ApiProperty({
@@ -12,7 +13,7 @@ export class CreateProfessionalProfileDto {
   @Length(10, 1000, {
     message: 'La biografía debe tener entre 10 y 1000 caracteres',
   })
-  biography: string;
+  biography?: string;
 
   @ApiProperty({
     example:
@@ -24,7 +25,7 @@ export class CreateProfessionalProfileDto {
   @Length(10, 500, {
     message: 'La experiencia debe tener entre 10 y 1000 caracteres',
   })
-  experience: string;
+  experience?: string;
 
   @ApiProperty({
     description: 'Número de matrícula profesional',
@@ -41,6 +42,9 @@ export class CreateProfessionalProfileDto {
     description: 'Área de especialización',
     example: 'DIABETES',
   })
-  @IsString({ message: 'La especialidad debe ser un texto válido' })
-  specialty?: string;
+  @IsString({
+    each: true,
+    message: 'Cada especialidad debe ser un texto válido',
+  })
+  specialty?: Specialty[];
 }

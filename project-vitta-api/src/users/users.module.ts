@@ -7,8 +7,8 @@ import { User } from '../common/entities/users.entity';
 import { ProfessionalProfile } from '../common/entities/professionalProfile.entity';
 
 @Module({
-    imports : [TypeOrmModule.forFeature([User, ProfessionalProfile])],
-    controllers: [UsersController],
-    providers: [UsersService, UsersRepository],
+  imports: [TypeOrmModule.forFeature([User, ProfessionalProfile])],
+  controllers: [UsersController],
+  providers: [UsersService, UsersRepository],
 })
 export class UsersModule {}

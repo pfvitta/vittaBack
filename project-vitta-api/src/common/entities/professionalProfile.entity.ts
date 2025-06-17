@@ -2,10 +2,12 @@ import {
   Column,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './users.entity';
+import { Specialty } from './specialty.entity';
 
 @Entity({
   name: 'professional_profiles',
@@ -44,7 +46,8 @@ export class ProfessionalProfile {
   @Column({ type: 'varchar', nullable: false })
   licenseNumber: string;
 
-  // ID de la especialidad
-  @Column({ type: 'uuid', nullable: false })
-  specialtyId: string;
+  @OneToMany(() => Specialty, (specialty) => specialty.professionalProfile, {
+    cascade: true,
+  })
+  specialty: Specialty[];
 }

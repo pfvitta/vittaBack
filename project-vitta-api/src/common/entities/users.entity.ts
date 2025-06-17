@@ -71,7 +71,4 @@ export class User {
     (professionalProfile) => professionalProfile.user,
   )
   professionalProfile: ProfessionalProfile;
-
-  @OneToMany(() => Specialty, (specialty) => specialty.user)
-  specialty: Specialty[];
 }

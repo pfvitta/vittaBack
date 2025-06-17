@@ -4,13 +4,12 @@ import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersService {
-  
-  constructor(private usersRepository: UsersRepository) {}  
-  
+  constructor(private usersRepository: UsersRepository) {}
+
   getUsersById(id: string) {
     return this.usersRepository.getUsersById(id);
   }
-  
+
   getUsers() {
     return this.usersRepository.getUsers();
   }
@@ -18,5 +17,4 @@ export class UsersService {
   createUser(user: CreateAccountDto) {
     return this.usersRepository.createUser(user);
   }
-
 }

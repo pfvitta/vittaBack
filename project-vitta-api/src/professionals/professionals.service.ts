@@ -6,7 +6,4 @@ import { CreateAccountDto } from 'src/common/dtos/createAccount.dto';
 @Injectable()
 export class ProvidersService {
   constructor(private providersRepository: ProvidersRepository) {}
-
-  
-  
 }
