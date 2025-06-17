@@ -36,18 +36,17 @@ export class CreateAccountDto {
   })
   password: string;
 
-  //Camilo lo desactivé para que no creara conflicto con la entity, porque esto no aparece en el entity de User
-  // @ApiProperty({ example: 'Abcde#123' })
-  // @IsNotEmpty({ message: 'La contraseña es obligatoria' })
-  // @IsString({ message: 'La contraseña debe ser una cadena de texto' })
-  // @Length(6, 15, {
-  //   message: 'La contraseña debe tener entre 6 y 15 caracteres',
-  // })
-  // @Matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])/, {
-  //   message:
-  //     'La contraseña debe tener al menos una mayúscula, un número y un carácter especial',
-  // })
-  // validatePassword: string;
+  /**@ApiProperty({ example: 'Abcde#123' })
+  @IsNotEmpty({ message: 'La contraseña es obligatoria' })
+  @IsString({ message: 'La contraseña debe ser una cadena de texto' })
+  @Length(6, 15, {
+    message: 'La contraseña debe tener entre 6 y 15 caracteres',
+  })
+  @Matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])/, {
+    message:
+      'La contraseña debe tener al menos una mayúscula, un número y un carácter especial',
+  })
+  validatePassword: string; */
 
   @ApiProperty({ example: '+49123456789' })
   @IsNotEmpty({ message: 'El número de teléfono es obligatorio' })
