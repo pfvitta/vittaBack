@@ -48,7 +48,7 @@ export class UsersRepository {
     async createUser(users: any): Promise<any> {//Promise<string | Omit<CreateAccountDto, "password">> {
     //async createUser(users: CreateAccountDto): Promise<string | Omit<CreateAccountDto, "password">> {
         console.log('usersRepository.createUser', users);
-        users =  users.user;
+        if (users.role === undefined) users =  users.user;
         
         const existeEmail = await this.usersRepository.findOne({
             where: { email: users.email } 
