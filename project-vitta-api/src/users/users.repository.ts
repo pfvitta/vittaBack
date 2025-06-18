@@ -6,6 +6,7 @@ import { User } from "../common/entities/users.entity";
 import * as bcrypt from 'bcrypt';
 import { ProfessionalProfile } from "../common/entities/professionalProfile.entity";
 import { Specialty } from "../common/entities/specialty.entity";
+import { envioConfirmacion } from "../helper/serviceMail/serviceMail";
 
 @Injectable()
 export class UsersRepository {
@@ -46,7 +47,7 @@ export class UsersRepository {
     // Crea un usuario en general y si es profesional, crea su perfil profesional
     async createUser(users: any): Promise<any> {//Promise<string | Omit<CreateAccountDto, "password">> {
     //async createUser(users: CreateAccountDto): Promise<string | Omit<CreateAccountDto, "password">> {
-
+        console.log('usersRepository.createUser', users);
         users =  users.user;
         
         const existeEmail = await this.usersRepository.findOne({
@@ -73,7 +74,7 @@ export class UsersRepository {
             phone: users.phone,
             dni: users.dni,
             city: users.city,
-            dob: users.dob,
+            dob: users.dob || new Date(), // Asignar null si no se proporciona una fecha de nacimiento
             createdAt: new Date(), // Asignar la fecha actual
             status: 'activo', // Asignar un valor por defecto
             role: users.role
@@ -123,6 +124,9 @@ export class UsersRepository {
             await this.professionalProfileRepository.save(profesionalProfile);
         }
 
+        if (users.role === 'provider') await envioConfirmacion('welcomeProvider', users.email);
+        else await envioConfirmacion('welcomeUser', users.email);
+        
         // Excluir el campo 'password' del objeto de usuario
         const { password, ...userWithoutPassword } = users;
         return userWithoutPassword;
