@@ -31,3 +31,4 @@ export class SpecialtySeederService implements OnApplicationBootstrap {
     console.log('✅ Especialidades insertadas automáticamente al iniciar.');
   }
 }
+
