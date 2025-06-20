@@ -13,7 +13,6 @@ export class AuthController {
 
   @Post('signup')
   async signup(@Body() createUser: any) {
-    console.log('createUser', createUser);
     return await this.usersService.createUser(createUser);
 
   }
