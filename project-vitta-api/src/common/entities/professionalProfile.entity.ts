@@ -2,6 +2,8 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -46,8 +48,12 @@ export class ProfessionalProfile {
   @Column({ type: 'varchar', nullable: false })
   licenseNumber: string;
 
-  @OneToMany(() => Specialty, (specialty) => specialty.professionalProfile, {
-    cascade: true,
-  })
+  // @OneToMany(() => Specialty, (specialty) => specialty.professionalProfile, {
+  //   cascade: true,
+  // })
+  // specialty: Specialty[];
+  
+  @ManyToMany(() => Specialty, { cascade: true })
+  @JoinTable() // Este decorador crea la tabla intermedia
   specialty: Specialty[];
 }

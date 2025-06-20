@@ -13,6 +13,10 @@ import typeOrmConfig from './config/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { validationSchema } from './config/validation';
 
+import { Specialty } from './common/entities/specialty.entity';
+import { SpecialtySeederService } from './specialty/specialty-seeder.service';
+
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -28,6 +32,10 @@ import { validationSchema } from './config/validation';
         return dbConfig;
       },
     }),
+
+    // 👇 Conexión de la entidad Specialty para que el Seeder tenga acceso
+    TypeOrmModule.forFeature([Specialty]),
+
     JwtModule.registerAsync({
       global: true,
       imports: [ConfigModule],
@@ -46,6 +54,7 @@ import { validationSchema } from './config/validation';
     AdminModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, SpecialtySeederService],
 })
 export class AppModule {}
+ 

@@ -7,9 +7,9 @@ import {
   IsDateString,
   Matches,
   IsOptional,
+  IsArray,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Specialty } from '../entities/specialty.entity';
 
 export class CreateAccountDto {
   // ==== Campos comunes para todos los usuarios ====
@@ -49,11 +49,11 @@ export class CreateAccountDto {
   })
   validatePassword: string; */
 
-  @ApiProperty({ example: '+573001112233' })
+  @ApiProperty({ example: '+49123456789' })
   @IsNotEmpty({ message: 'El número de teléfono es obligatorio' })
-  @IsPhoneNumber('CO', {
-    message: 'Debe ser un número de teléfono colombiano válido',
-  })
+  // @IsPhoneNumber(undefined, {
+  //   message: 'Debe ser un número de teléfono válido',
+  // })
   phone: string;
 
   @ApiProperty({ example: '1234567890' })
@@ -122,10 +122,21 @@ export class CreateAccountDto {
     description: 'Área de especialización',
     example: 'DIABETES',
   })
-  @IsOptional()
-  @IsString({
-    each: true,
-    message: 'Cada especialidad debe ser un texto válido',
+  
+  // @IsOptional()
+  // @IsString({ message: 'La especialidad debe ser un texto válido' })
+  // specialty?: string[];
+
+  @ApiProperty({
+    description: 'Áreas de especialización (si es profesional)',
+    example: ['DIABETES', 'OBESIDAD'],
+    required: false,
+    isArray: true,
+    type: String,
   })
-  specialty?: Specialty[];
+  @IsOptional()
+  @IsArray({ message: 'La especialidad debe ser un arreglo' })
+  @IsString({ each: true, message: 'Cada especialidad debe ser texto' })
+  specialty?: string[];
+
 }
