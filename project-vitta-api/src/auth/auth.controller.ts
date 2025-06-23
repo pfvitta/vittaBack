@@ -1,8 +1,9 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAccountDto } from '../common/dtos/createAccount.dto';
 import { UsersService } from 'src/users/users.service';
 import { UserCredentialDto } from 'src/common/dtos/userCredential.dto';
+
+import { Request, Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -15,7 +16,6 @@ export class AuthController {
   async signup(@Body() createUser: any) {
     console.log('createUser', createUser);
     return await this.usersService.createUser(createUser);
-
   }
 
   @Post('signin')

@@ -52,7 +52,7 @@ export class ProfessionalProfile {
   //   cascade: true,
   // })
   // specialty: Specialty[];
-  
+
   @ManyToMany(() => Specialty, { cascade: true })
   @JoinTable() // Este decorador crea la tabla intermedia
   specialty: Specialty[];

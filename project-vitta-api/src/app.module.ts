@@ -16,7 +16,6 @@ import { validationSchema } from './config/validation';
 import { Specialty } from './common/entities/specialty.entity';
 import { SpecialtySeederService } from './specialty/specialty-seeder.service';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -57,4 +56,3 @@ import { SpecialtySeederService } from './specialty/specialty-seeder.service';
   providers: [AppService, SpecialtySeederService],
 })
 export class AppModule {}
- 
