@@ -19,6 +19,8 @@ import { PaypalModule } from './paypal/paypal.module';
 import { ProfessionalsSeederService } from './professionals/professionals-seeder.service';
 import { ProfessionalProfile } from './common/entities/professionalProfile.entity';
 import { User } from './common/entities/users.entity';
+import { Files } from './common/entities/files.entity';
+import { FilesModule } from './files/files.module';
 
 
 @Module({
@@ -38,7 +40,7 @@ import { User } from './common/entities/users.entity';
     }),
 
     // 👇 Conexión de la entidad Specialty para que el Seeder tenga acceso
-    TypeOrmModule.forFeature([Specialty, ProfessionalProfile, User]),
+    TypeOrmModule.forFeature([Specialty, ProfessionalProfile, User, Files]),
 
     JwtModule.registerAsync({
       global: true,
@@ -56,7 +58,8 @@ import { User } from './common/entities/users.entity';
     AppointmentsModule,
     MembershipsModule,
     AdminModule,
-    PaypalModule
+    PaypalModule,
+    FilesModule
   ],
   controllers: [AppController],
   providers: [AppService, SpecialtySeederService, ProfessionalsSeederService],
