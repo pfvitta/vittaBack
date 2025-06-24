@@ -16,3 +16,4 @@ export class Auth0Guard implements CanActivate {
     }
     return true;
 }
+}

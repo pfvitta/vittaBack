@@ -3,11 +3,8 @@ import { ConfigParams } from 'express-openid-connect';
 
 dotenvConfig({ path: '.env.development' });
 
-<<<<<<< HEAD
 export const config: ConfigParams = {
-=======
-export const config = {
->>>>>>> 1bfca6af5914090738bac35aca2172309dd750a7
+// export const config = {
   authRequired: false, // solo algunas rutas requerirán auth
   auth0Logout: true,
   secret: process.env.AUTH0_SECRET,
@@ -15,7 +12,6 @@ export const config = {
   baseURL: process.env.AUTH0_BASE_URL,
   clientID: process.env.AUTH0_CLIENT_ID,
   clientSecret: process.env.AUTH0_CLIENT_SECRET,
-<<<<<<< HEAD
   routes: {
     login: false,
     logout: false,
@@ -25,6 +21,4 @@ export const config = {
     response_type: 'code',
     scope: 'openid profile email',
   },
-=======
->>>>>>> 1bfca6af5914090738bac35aca2172309dd750a7
 };
