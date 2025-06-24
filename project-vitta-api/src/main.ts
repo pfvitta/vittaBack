@@ -16,8 +16,6 @@ async function bootstrap() {
     credentials: true,
   });
 
-  //app.useGlobalGuards(new AuthGuard());
-
   app.use(auth(auth0Config));
 
   app.useGlobalPipes(

@@ -70,12 +70,11 @@ export class User {
 
   @OneToOne(
     () => ProfessionalProfile,
-    (professionalProfile) => professionalProfile.user, 
+    (professionalProfile) => professionalProfile.user,
   )
   professionalProfile: ProfessionalProfile;
 
   @OneToOne(() => Files, { cascade: true, eager: true })
   @JoinColumn() // esta decorador indica que esta entidad es la "dueña" de la relación
   file: Files;
-  
 }

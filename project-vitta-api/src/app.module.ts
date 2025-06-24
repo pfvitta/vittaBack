@@ -22,7 +22,6 @@ import { User } from './common/entities/users.entity';
 import { Files } from './common/entities/files.entity';
 import { FilesModule } from './files/files.module';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -59,10 +58,9 @@ import { FilesModule } from './files/files.module';
     MembershipsModule,
     AdminModule,
     PaypalModule,
-    FilesModule
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService, SpecialtySeederService, ProfessionalsSeederService],
 })
 export class AppModule {}
- 
