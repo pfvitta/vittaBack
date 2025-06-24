@@ -15,6 +15,7 @@ import { validationSchema } from './config/validation';
 
 import { Specialty } from './common/entities/specialty.entity';
 import { SpecialtySeederService } from './specialty/specialty-seeder.service';
+
 import { PaypalModule } from './paypal/paypal.module';
 import { ProfessionalsSeederService } from './professionals/professionals-seeder.service';
 import { ProfessionalProfile } from './common/entities/professionalProfile.entity';
@@ -59,10 +60,9 @@ import { FilesModule } from './files/files.module';
     MembershipsModule,
     AdminModule,
     PaypalModule,
-    FilesModule
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService, SpecialtySeederService, ProfessionalsSeederService],
 })
 export class AppModule {}
- 

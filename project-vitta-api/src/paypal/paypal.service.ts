@@ -47,7 +47,9 @@ export class PaypalService {
     });
 
     const response = await this.client.execute(request);
-    const approvalUrl = response.result.links.find(link => link.rel === 'approve')?.href;
+    const approvalUrl = response.result.links.find(
+      (link) => link.rel === 'approve',
+    )?.href;
 
     if (!approvalUrl) {
       throw new Error('No se pudo obtener la URL de aprobación de PayPal');

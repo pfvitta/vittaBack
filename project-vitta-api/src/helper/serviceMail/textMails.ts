@@ -2,11 +2,11 @@ export const textMails = async (tipoEmail: string, email: string) => {
   let mailOptions: any = {};
 
   switch (tipoEmail) {
-    case "welcomeUser":
+    case 'welcomeUser':
       mailOptions = {
         from: '"Mensaje de Bienvenida - Vitta" <pfvitta@gmail.com>',
         to: email,
-        subject: "Saludos, ¡tu cuenta ha sido creada!",
+        subject: 'Saludos, ¡tu cuenta ha sido creada!',
         html: `
           <p>¡Gracias por registrarte en Vitta!</p><br>
           <p>Estamos muy felices de que formes parte de nuestra comunidad de bienestar y nutrición.💈</p><br>
@@ -28,15 +28,15 @@ export const textMails = async (tipoEmail: string, email: string) => {
           <p>El equipo de Vitta</p>
           <p>Vive con propósito, aliméntate con ciencia</p><br>
           <p>Saludos cordiales,</p><br>
-          `
+          `,
       };
       break;
 
-    case "welcomeProvider":
+    case 'welcomeProvider':
       mailOptions = {
         from: '"Bienvenida Profesional - Vitta" <pfvitta@gmail.com>',
         to: email,
-        subject: "¡Bienvenido a Vitta como profesional de la salud!",
+        subject: '¡Bienvenido a Vitta como profesional de la salud!',
         html: `
             <p>Gracias por registrarte como profesional en Vitta. 🎉
 

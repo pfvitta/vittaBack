@@ -3,6 +3,8 @@ import { AppModule } from './app.module';
 import { LoggerGlobal } from './common/middleware/logger.middleware';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
+import { auth } from 'express-openid-connect';
+import { config as auth0Config } from './config/auth0.config';
 //import { AuthGuard } from './common/guards/auth.guard';
 
 async function bootstrap() {
@@ -14,7 +16,8 @@ async function bootstrap() {
     credentials: true,
   });
 
-  //app.useGlobalGuards(new AuthGuard());
+
+  app.use(auth(auth0Config));
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -46,7 +49,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
 
-
-  await app.listen(process.env.PORT ?? 4000);
+  await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
