@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -9,6 +10,7 @@ import {
 import { Membership } from './membership.entity';
 import { ProfessionalProfile } from './professionalProfile.entity';
 import { Specialty } from './specialty.entity';
+import { Files } from './files.entity';
 
 /**
  * Entidad para usuarios del sistema
@@ -71,4 +73,8 @@ export class User {
     (professionalProfile) => professionalProfile.user,
   )
   professionalProfile: ProfessionalProfile;
+
+  @OneToOne(() => Files, { cascade: true, eager: true })
+  @JoinColumn() // esta decorador indica que esta entidad es la "dueña" de la relación
+  file: Files;
 }

@@ -122,11 +122,10 @@ export class CreateAccountDto {
     description: 'Área de especialización',
     example: 'DIABETES',
   })
-  
+
   // @IsOptional()
   // @IsString({ message: 'La especialidad debe ser un texto válido' })
   // specialty?: string[];
-
   @ApiProperty({
     description: 'Áreas de especialización (si es profesional)',
     example: ['DIABETES', 'OBESIDAD'],
@@ -138,5 +137,4 @@ export class CreateAccountDto {
   @IsArray({ message: 'La especialidad debe ser un arreglo' })
   @IsString({ each: true, message: 'Cada especialidad debe ser texto' })
   specialty?: string[];
-
 }
