@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 import { ProfessionalProfile } from "../common/entities/professionalProfile.entity";
 import { Specialty } from "../common/entities/specialty.entity";
 import { envioConfirmacion } from "../helper/serviceMail/serviceMail";
+import { spec } from "node:test/reporters";
 
 @Injectable()
 export class UsersRepository {
@@ -33,7 +34,7 @@ export class UsersRepository {
         
         const user = await this.usersRepository.findOne({
             where: { id },
-            relations: ['professionalProfile', 'membership'] 
+            relations: ['professionalProfile', 'membership','specialty']
         });
 
         if (!user) {
