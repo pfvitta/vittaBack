@@ -15,6 +15,12 @@ import { validationSchema } from './config/validation';
 
 import { Specialty } from './common/entities/specialty.entity';
 import { SpecialtySeederService } from './specialty/specialty-seeder.service';
+import { PaypalModule } from './paypal/paypal.module';
+import { ProfessionalsSeederService } from './professionals/professionals-seeder.service';
+import { ProfessionalProfile } from './common/entities/professionalProfile.entity';
+import { User } from './common/entities/users.entity';
+import { Files } from './common/entities/files.entity';
+import { FilesModule } from './files/files.module';
 
 
 @Module({
@@ -34,7 +40,7 @@ import { SpecialtySeederService } from './specialty/specialty-seeder.service';
     }),
 
     // 👇 Conexión de la entidad Specialty para que el Seeder tenga acceso
-    TypeOrmModule.forFeature([Specialty]),
+    TypeOrmModule.forFeature([Specialty, ProfessionalProfile, User, Files]),
 
     JwtModule.registerAsync({
       global: true,
@@ -52,9 +58,11 @@ import { SpecialtySeederService } from './specialty/specialty-seeder.service';
     AppointmentsModule,
     MembershipsModule,
     AdminModule,
+    PaypalModule,
+    FilesModule
   ],
   controllers: [AppController],
-  providers: [AppService, SpecialtySeederService],
+  providers: [AppService, SpecialtySeederService, ProfessionalsSeederService],
 })
 export class AppModule {}
  
