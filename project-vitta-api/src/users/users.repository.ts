@@ -36,7 +36,7 @@ export class UsersRepository {
         
         const user = await this.usersRepository.findOne({
             where: { id },
-            relations: ['professionalProfile', 'membership'] 
+            relations: ['professionalProfile', 'membership', 'specialty'], 
         });
 
     if (!user) {
@@ -83,7 +83,7 @@ export class UsersRepository {
       city: users.city,
       dob: users.dob || new Date(), // Asignar null si no se proporciona una fecha de nacimiento
       createdAt: new Date(), // Asignar la fecha actual
-      status: 'activo', // Asignar un valor por defecto
+      status: 'Active', // Asignar un valor por defecto
       role: users.role,
     };
 
