@@ -1,29 +1,15 @@
-<<<<<<< HEAD
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Req,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
-=======
 import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
->>>>>>> 1bfca6af5914090738bac35aca2172309dd750a7
 import { AuthService } from './auth.service';
 import { UsersService } from 'src/users/users.service';
 import { UserCredentialDto } from 'src/common/dtos/userCredential.dto';
 import { Request, Response } from 'express';
 import { Auth0Guard } from 'src/common/guards/auth0.guard';
 
-import { Request, Response } from 'express';
-
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly usersService: UsersService,
+    private readonly usersService: UsersService
   ) {}
 
   @Get('login')
