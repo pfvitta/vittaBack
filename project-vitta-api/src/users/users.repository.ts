@@ -19,9 +19,13 @@ export class UsersRepository {
   ) {}
 
   async getUsers(): Promise<Omit<User, 'password'>[]> {
+<<<<<<< HEAD
     const users = await this.usersRepository.find({
       relations: ['professionalProfile', 'membership'],
     });
+=======
+    const users = await this.usersRepository.find();
+>>>>>>> 1bfca6af5914090738bac35aca2172309dd750a7
     const usersWithoutPassword = users.map((user) => {
       const { password, ...userWithoutPassword } = user; // Excluir el campo 'password'
       return userWithoutPassword;
@@ -32,7 +36,11 @@ export class UsersRepository {
   async getUsersById(id: string): Promise<string | Omit<User, 'password'>> {
     const user = await this.usersRepository.findOne({
       where: { id },
+<<<<<<< HEAD
       relations: ['professionalProfile', 'membership'],
+=======
+      relations: ['professionalProfile', 'membership'], // Asegurarse de incluir las relaciones con el perfil profesional y la membresía si es necesario
+>>>>>>> 1bfca6af5914090738bac35aca2172309dd750a7
     });
 
     if (!user) {

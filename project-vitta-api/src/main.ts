@@ -16,6 +16,7 @@ async function bootstrap() {
     credentials: true,
   });
 
+
   app.use(auth(auth0Config));
 
   app.useGlobalPipes(
@@ -48,6 +49,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(process.env.PORT ?? 4000);
+  await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

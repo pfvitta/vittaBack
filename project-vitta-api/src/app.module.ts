@@ -15,12 +15,14 @@ import { validationSchema } from './config/validation';
 
 import { Specialty } from './common/entities/specialty.entity';
 import { SpecialtySeederService } from './specialty/specialty-seeder.service';
+
 import { PaypalModule } from './paypal/paypal.module';
 import { ProfessionalsSeederService } from './professionals/professionals-seeder.service';
 import { ProfessionalProfile } from './common/entities/professionalProfile.entity';
 import { User } from './common/entities/users.entity';
 import { Files } from './common/entities/files.entity';
 import { FilesModule } from './files/files.module';
+
 
 @Module({
   imports: [
