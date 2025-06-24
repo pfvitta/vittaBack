@@ -29,13 +29,7 @@ export class UsersRepository {
         });
         return usersWithoutPassword;
 
-    const users = await this.usersRepository.find();
-
-    const usersWithoutPassword = users.map((user) => {
-      const { password, ...userWithoutPassword } = user; // Excluir el campo 'password'
-      return userWithoutPassword;
-    });
-    return usersWithoutPassword;
+    
   }
 
     async getUsersById(id: string): Promise<string | Omit<User, 'password'>> {
