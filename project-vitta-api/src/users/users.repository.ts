@@ -21,7 +21,7 @@ export class UsersRepository {
     
     async getUsers(): Promise<Omit<User, "password">[]> {
         const users = await this.usersRepository.find({
-            relations: ['professionalProfile', 'membership', 'specialty']
+            relations: ['professionalProfile', 'professionalProfile.specialty','membership']
         });
         const usersWithoutPassword = users.map(user => {
             const { password, ...userWithoutPassword } = user; // Excluir el campo 'password'
@@ -36,7 +36,8 @@ export class UsersRepository {
         
         const user = await this.usersRepository.findOne({
             where: { id },
-            relations: ['professionalProfile', 'membership', 'specialty'], 
+            relations: ['professionalProfile','professionalProfile.specialty','membership'],
+
         });
 
     if (!user) {
