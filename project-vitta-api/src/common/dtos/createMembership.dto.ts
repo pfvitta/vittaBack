@@ -30,12 +30,12 @@ export class CreateMembershipDto {
   type: string;
 
   @ApiProperty({
-    example: 'activa',
-    description: "Estado actual de la membresía (ej: 'activa', 'vencida')",
+    example: 'Active',
+    description: "Estado actual de la membresía (ej: 'Active', 'Inactive')",
   })
   @IsNotEmpty({ message: 'El estado es obligatorio' })
   @IsString({ message: 'El estado debe ser una cadena de texto' })
-  @Matches(/^(activa|vencida)$/, {
+  @Matches(/^(Active|Inactive)$/, {
     message: "El estado debe ser 'activa' o 'vencida'",
   })
   status: string;

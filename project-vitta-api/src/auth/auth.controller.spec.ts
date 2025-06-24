@@ -14,6 +14,4 @@ describe('AuthController', () => {
 
     controller = module.get<AuthController>(AuthController);
   });
-
-  
 });
