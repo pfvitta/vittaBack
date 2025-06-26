@@ -63,7 +63,7 @@ export const textMails = async (tipoEmail: string, email: string) => {
       };
       break;
 
-      case "paypalSuccess":
+      case "paymentSuccess":
       mailOptions = {
           from: '"Pago Exitoso - Vitta" <pfvitta@gmail.com>',
           to: email,
@@ -77,7 +77,7 @@ export const textMails = async (tipoEmail: string, email: string) => {
        };
         break;
 
-    case "paypalCancel":
+    case "paymentCancel":
         mailOptions = {
           from: '"Pago Cancelado - Vitta" <pfvitta@gmail.com>',
           to: email,
