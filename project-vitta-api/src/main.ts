@@ -6,6 +6,7 @@ import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { auth } from 'express-openid-connect';
 import { config as auth0Config } from './config/auth0.config';
 //import { AuthGuard } from './common/guards/auth.guard';
+import * as express from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,6 +19,7 @@ async function bootstrap() {
 
 
   app.use(auth(auth0Config));
+  app.use('/stripe/webhook', express.raw({ type: '*/*' }));
 
   app.useGlobalPipes(
     new ValidationPipe({

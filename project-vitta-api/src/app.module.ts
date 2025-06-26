@@ -22,6 +22,7 @@ import { ProfessionalProfile } from './common/entities/professionalProfile.entit
 import { User } from './common/entities/users.entity';
 import { Files } from './common/entities/files.entity';
 import { FilesModule } from './files/files.module';
+import { StripeModule } from './stripe/stripe.module';
 
 
 @Module({
@@ -61,6 +62,7 @@ import { FilesModule } from './files/files.module';
     AdminModule,
     PaypalModule,
     FilesModule,
+    StripeModule
   ],
   controllers: [AppController],
   providers: [AppService, SpecialtySeederService, ProfessionalsSeederService],

@@ -1,3 +1,7 @@
+// Este servicio maneja la creación y captura de órdenes de PayPal, así como el 
+// registro de pagos en la base de datos.
+// También envía correos de confirmación al usuario después de un pago exitoso o cancelado.
+
 import { Injectable } from '@nestjs/common';
 import * as paypal from '@paypal/checkout-server-sdk';
 import { Payment } from '../common/entities/payment.entity';
@@ -13,9 +17,12 @@ export class PaypalService {
   private client: paypal.core.PayPalHttpClient;
 
   constructor(
-    @InjectRepository(Payment) private readonly paymentRepository: Repository<Payment>,
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
-    @InjectRepository(Membership) private readonly membershipRepository: Repository<Membership>,
+    @InjectRepository(Payment)
+    private readonly paymentRepository: Repository<Payment>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    @InjectRepository(Membership)
+    private readonly membershipRepository: Repository<Membership>,
   ) {
     this.environment = new paypal.core.SandboxEnvironment(
       process.env.PAYPAL_CLIENT_ID,
@@ -78,19 +85,20 @@ export class PaypalService {
           throw new Error('Usuario no encontrado');
         }
 
-        // Guardar pago
         const payment = this.paymentRepository.create({
           paypalOrderId: result.id,
           captureId: capture.id,
+          stripePaymentIntentId: null, // este campo es para Stripe, no se usa en PayPal
           payerEmail: result.payer.email_address,
           amount: capture.amount.value,
           currency: capture.amount.currency_code,
           status: result.status,
+          paymentMethod: 'paypal',
           user: user,
         });
 
         await this.paymentRepository.save(payment);
-        await envioConfirmacion('paypalSuccess', user.email);
+        await envioConfirmacion('paymentSuccess', user.email);
 
         // Activar o crear membresía
         const today = new Date();
@@ -117,9 +125,8 @@ export class PaypalService {
         }
 
       } else {
-        // Enviar correo si el pago no fue completado
         const payerEmail = result?.payer?.email_address || 'correo_no_disponible@vitta.com';
-        await envioConfirmacion('paypalCancel', payerEmail);
+        await envioConfirmacion('paymentCancel', payerEmail);
       }
 
       return result;
