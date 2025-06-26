@@ -1,4 +1,16 @@
+<<<<<<< Updated upstream
 import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+=======
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
+>>>>>>> Stashed changes
 import { AuthService } from './auth.service';
 import { UsersService } from 'src/users/users.service';
 import { UserCredentialDto } from 'src/common/dtos/userCredential.dto';
@@ -44,14 +56,14 @@ export class AuthController {
 
   @Get('callback')
   @UseGuards(Auth0Guard)
-  callback( @Res() res: Response) {
+  callback(@Res() res: Response) {
     return res.redirect('http://localhost:3000/dashboard');
   }
 
   @Get('me')
   @UseGuards(Auth0Guard)
   getMe(@Req() req: Request) {
-    console.log(req.oidc.user)
+    console.log(req.oidc.user);
     return req.oidc.user;
   }
 

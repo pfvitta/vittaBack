@@ -17,7 +17,6 @@ async function bootstrap() {
     credentials: true,
   });
 
-
   app.use(auth(auth0Config));
   app.use('/stripe/webhook', express.raw({ type: '*/*' }));
 

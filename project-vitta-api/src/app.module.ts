@@ -24,7 +24,6 @@ import { Files } from './common/entities/files.entity';
 import { FilesModule } from './files/files.module';
 import { StripeModule } from './stripe/stripe.module';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({

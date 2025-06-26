@@ -11,6 +11,7 @@ import { envioConfirmacion } from '../helper/serviceMail/serviceMail';
 @Injectable()
 export class UsersRepository {
 
+<<<<<<< Updated upstream
     
     constructor(
         @InjectRepository(User) private readonly usersRepository: Repository<User>,
@@ -39,6 +40,25 @@ export class UsersRepository {
             relations: ['professionalProfile','professionalProfile.specialty','membership'],
 
         });
+=======
+  async getUsers(): Promise<Omit<User, 'password'>[]> {
+    const users = await this.usersRepository.find({
+      relations: ['professionalProfile', 'membership'],
+    });
+
+    const usersWithoutPassword = users.map((user) => {
+      const { password, ...userWithoutPassword } = user; // Excluir el campo 'password'
+      return userWithoutPassword;
+    });
+    return usersWithoutPassword;
+  }
+
+  async getUsersById(id: string): Promise<string | Omit<User, 'password'>> {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: ['professionalProfile', 'membership'],
+    });
+>>>>>>> Stashed changes
 
     if (!user) {
       throw new BadRequestException('Usuario no encontrado');
