@@ -20,8 +20,8 @@ export class StripeController {
   constructor(private readonly stripeService: StripeService) {}
 
   @Post('create-order')
-  createIntent() {
-    return this.stripeService.createPaymentIntent();
+  createIntent(@Body('email') email: string) {
+    return this.stripeService.createPaymentIntent(49.99, 'usd', email);
   }
 
   @Post('webhook')
@@ -44,19 +44,19 @@ export class StripeController {
     }
 
     switch (event.type) {
-  case 'payment_intent.succeeded': {
-    const intent = event.data.object as Stripe.PaymentIntent;
-    console.log('✅ Pago exitoso:', intent.id);
-    await this.stripeService.handleSuccessfulPayment(intent);
-    break;
-  }
+      case 'payment_intent.succeeded': {
+        const intent = event.data.object as Stripe.PaymentIntent;
+        console.log('✅ Pago exitoso:', intent.id);
+        await this.stripeService.handleSuccessfulPayment(intent);
+        break;
+      }
 
-  case 'payment_intent.payment_failed': {
-    const intent = event.data.object as Stripe.PaymentIntent;
-    console.error('❌ Pago fallido');
-    await this.stripeService.handleFailedPayment(intent);
-    break;
-  }
+      case 'payment_intent.payment_failed': {
+        const intent = event.data.object as Stripe.PaymentIntent;
+        console.error('❌ Pago fallido');
+        await this.stripeService.handleFailedPayment(intent);
+        break;
+      }
 
   default:
     console.log(`📦 Evento sin manejar: ${event.type}`);
