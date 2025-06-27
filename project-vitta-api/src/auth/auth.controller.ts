@@ -17,10 +17,10 @@ export class AuthController {
     try {
       // ✅ Correcto: await + try/catch
       await res.oidc.login({
-        returnTo: 'http://localhost:3000/dashboard',
+        returnTo: 'http://localhost:3000/dashboard/user',
         authorizationParams: {
           redirect_uri: 'http://localhost:4000/auth/callback',
-          //prompt: 'login', // 👈 obliga a mostrar el formulario SIEMPRE
+          //prompt: 'login', // 👈 obliga a mostrar el formulario SIEMPRE 
           //connection: 'google-oauth2', // 👈 evita SSO silencioso
         },
       });
