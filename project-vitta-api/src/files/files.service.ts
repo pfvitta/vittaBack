@@ -14,7 +14,7 @@ export class FilesService {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
-  async uploadImage(id: string, file: Express.Multer.File): Promise<string> {
+  async uploadImage(id: string, file: Express.Multer.File): Promise<any> {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
       throw new BadRequestException('Usuario no encontrado');
@@ -26,7 +26,7 @@ export class FilesService {
       throw new BadRequestException('Error al subir la imagen');
     }
 
-    const newFile = new Files();
+    const newFile = new Files(); 
     newFile.id = uuid();
     newFile.filename = imagencargada.display_name;
     newFile.mimetype = `${imagencargada.resource_type}/${imagencargada.format}`;
@@ -37,6 +37,12 @@ export class FilesService {
     await this.filesRepository.save(newFile);
     await this.userRepository.save(user);
 
-    return 'Imagen subida correctamente';
+    // return 'Imagen subida correctamente';
+    return {
+      message: 'Imagen subida correctamente',
+      imgUrl: imagencargada.secure_url,
+      fileId: newFile.id
+    };
+
   }
 }
