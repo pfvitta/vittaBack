@@ -36,7 +36,7 @@ export class UsersRepository {
         
         const user = await this.usersRepository.findOne({
             where: { id },
-            relations: ['professionalProfile','professionalProfile.specialty','membership'],
+            relations: ['professionalProfile','professionalProfile.specialty','membership', 'file'],
 
         });
 
@@ -46,6 +46,7 @@ export class UsersRepository {
 
     // Excluir el campo 'password' del objeto de usuario
     const { password, ...userWithoutPassword } = user;
+    console.log (userWithoutPassword);
     return userWithoutPassword;
   }
 

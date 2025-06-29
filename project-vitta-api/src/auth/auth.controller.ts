@@ -52,12 +52,12 @@ export class AuthController {
   @UseGuards(Auth0Guard)
   getMe(@Req() req: Request) {
     console.log(req.oidc.user)
-    return req.oidc.user;
+    return req.oidc.user; 
   }
 
   @Post('signup')
   async signup(@Body() createUser: any) {
-    return await this.usersService.createUser(createUser);
+    return await this.usersService.createUser(createUser); 
   }
 
   @Post('signin')
