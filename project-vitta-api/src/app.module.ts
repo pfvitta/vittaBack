@@ -61,7 +61,7 @@ import { StripeModule } from './stripe/stripe.module';
     AdminModule,
     PaypalModule,
     FilesModule,
-    StripeModule
+    StripeModule,
   ],
   controllers: [AppController],
   providers: [AppService, SpecialtySeederService, ProfessionalsSeederService],

@@ -21,7 +21,9 @@ export class StripeService {
   ) {
     const stripeKey = process.env.STRIPE_SECRET_KEY;
     if (!stripeKey) {
-      throw new InternalServerErrorException('Stripe secret key not configured');
+      throw new InternalServerErrorException(
+        'Stripe secret key not configured',
+      );
     }
 
     this.stripe = new Stripe(stripeKey, {});
@@ -43,32 +45,34 @@ export class StripeService {
 
   async handleSuccessfulPayment(intent: Stripe.PaymentIntent): Promise<void> {
     const paymentIntent = await this.stripe.paymentIntents.retrieve(intent.id, {
-        expand: ['charges'],
+      expand: ['charges'],
     });
 
     const email = paymentIntent.receipt_email;
 
     if (!email) {
-        throw new Error('No se pudo determinar el correo electrónico del usuario');
+      throw new Error(
+        'No se pudo determinar el correo electrónico del usuario',
+      );
     }
 
     const user = await this.userRepository.findOne({
-        where: { email },
-        relations: ['membership'],
+      where: { email },
+      relations: ['membership'],
     });
 
     if (!user) {
-        throw new Error('Usuario no encontrado por email');
+      throw new Error('Usuario no encontrado por email');
     }
 
     const payment = this.paymentRepository.create({
-        payerEmail: email,
-        stripePaymentIntentId: paymentIntent.id,
-        amount: (paymentIntent.amount / 100).toFixed(2),
-        currency: paymentIntent.currency,
-        status: paymentIntent.status,
-        paymentMethod: 'stripe',
-        user,
+      payerEmail: email,
+      stripePaymentIntentId: paymentIntent.id,
+      amount: (paymentIntent.amount / 100).toFixed(2),
+      currency: paymentIntent.currency,
+      status: paymentIntent.status,
+      paymentMethod: 'stripe',
+      user,
     });
 
     await this.paymentRepository.save(payment);
@@ -79,43 +83,39 @@ export class StripeService {
     oneMonthLater.setMonth(today.getMonth() + 1);
 
     if (user.membership) {
-        user.membership.status = 'Active';
-        user.membership.startDate = today;
-        user.membership.endDate = oneMonthLater;
-        user.membership.price = parseFloat((paymentIntent.amount / 100).toFixed(2));
-        user.membership.type = 'mensual';
-        await this.membershipRepository.save(user.membership);
+      user.membership.status = 'Active';
+      user.membership.startDate = today;
+      user.membership.endDate = oneMonthLater;
+      user.membership.price = parseFloat(
+        (paymentIntent.amount / 100).toFixed(2),
+      );
+      user.membership.type = 'mensual';
+      await this.membershipRepository.save(user.membership);
     } else {
-        const membership = this.membershipRepository.create({
+      const membership = this.membershipRepository.create({
         user,
         type: 'mensual',
         status: 'Active',
         startDate: today,
         endDate: oneMonthLater,
         price: parseFloat((paymentIntent.amount / 100).toFixed(2)),
-        });
-        await this.membershipRepository.save(membership);
+      });
+      await this.membershipRepository.save(membership);
     }
-    }
+  }
 
-    async handleFailedPayment(intent: Stripe.PaymentIntent): Promise<void> {
-        const paymentIntent = await this.stripe.paymentIntents.retrieve(intent.id, {
-            expand: ['charges'],
-        });
+  async handleFailedPayment(intent: Stripe.PaymentIntent): Promise<void> {
+    const paymentIntent = await this.stripe.paymentIntents.retrieve(intent.id, {
+      expand: ['charges'],
+    });
 
-        const email = paymentIntent.receipt_email;
+    const email = paymentIntent.receipt_email;
 
-        const payerEmail = email || 'correo_no_disponible@vitta.com';
+    const payerEmail = email || 'correo_no_disponible@vitta.com';
 
-        await envioConfirmacion('paymentCancel', payerEmail);
-    }
-
+    await envioConfirmacion('paymentCancel', payerEmail);
+  }
 }
-
-
-
-
-
 
 // import { Injectable, InternalServerErrorException } from '@nestjs/common';
 // import Stripe from 'stripe';
