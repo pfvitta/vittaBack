@@ -20,8 +20,8 @@ export class StripeController {
   constructor(private readonly stripeService: StripeService) {}
 
   @Post('create-order')
-  createIntent() {
-    return this.stripeService.createPaymentIntent();
+  createIntent(@Body('email') email: string) {
+    return this.stripeService.createPaymentIntent(49.99, 'usd', email);
   }
 
   @Post('webhook')
