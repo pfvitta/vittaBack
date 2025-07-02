@@ -63,33 +63,32 @@ export const textMails = async (tipoEmail: string, email: string) => {
       };
       break;
 
-      case "paymentSuccess":
+    case 'paymentSuccess':
       mailOptions = {
-          from: '"Pago Exitoso - Vitta" <pfvitta@gmail.com>',
-          to: email,
-          subject: "🎉 ¡Tu pago fue exitoso!",
-          html: `
+        from: '"Pago Exitoso - Vitta" <pfvitta@gmail.com>',
+        to: email,
+        subject: '🎉 ¡Tu pago fue exitoso!',
+        html: `
             <p>¡Gracias por tu pago en Vitta! 🎉</p>
             <p>Tu membresía ha sido activada exitosamente.</p>
             <p>Disfruta de todos los beneficios que ofrecemos.</p><br>
             <p>Atentamente,<br>Equipo Vitta</p>
           `,
-       };
-        break;
+      };
+      break;
 
-    case "paymentCancel":
-        mailOptions = {
-          from: '"Pago Cancelado - Vitta" <pfvitta@gmail.com>',
-          to: email,
-          subject: "⛔ Tu pago fue cancelado",
-          html: `
+    case 'paymentCancel':
+      mailOptions = {
+        from: '"Pago Cancelado - Vitta" <pfvitta@gmail.com>',
+        to: email,
+        subject: '⛔ Tu pago fue cancelado',
+        html: `
             <p>Lamentamos que hayas cancelado el pago. 😔</p>
             <p>Si fue un error o deseas intentarlo de nuevo, puedes volver a ingresar a Vitta y finalizar tu pago.</p><br>
             <p>Atentamente,<br>Equipo Vitta</p>
           `,
       };
       break;
-
 
     default:
       throw new Error(`Tipo de email no soportado: ${tipoEmail}`);

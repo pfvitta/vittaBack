@@ -7,9 +7,7 @@ import { User } from '../common/entities/users.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Payment, User, Membership])
-  ],
+  imports: [TypeOrmModule.forFeature([Payment, User, Membership])],
   controllers: [PaypalController],
   providers: [PaypalService],
 })

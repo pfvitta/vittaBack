@@ -58,8 +58,8 @@ export class StripeController {
         break;
       }
 
-  default:
-    console.log(`📦 Evento sin manejar: ${event.type}`);
+      default:
+        console.log(`📦 Evento sin manejar: ${event.type}`);
     }
     res.json({ received: true });
   }

@@ -10,35 +10,39 @@ import { envioConfirmacion } from '../helper/serviceMail/serviceMail';
 
 @Injectable()
 export class UsersRepository {
+  constructor(
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    @InjectRepository(ProfessionalProfile)
+    private readonly professionalProfileRepository: Repository<ProfessionalProfile>,
+    @InjectRepository(Specialty)
+    private readonly specialtyRepository: Repository<Specialty>,
+  ) {}
 
-    
-    constructor(
-        @InjectRepository(User) private readonly usersRepository: Repository<User>,
-        @InjectRepository(ProfessionalProfile) private readonly professionalProfileRepository: Repository<ProfessionalProfile>,
-        @InjectRepository(Specialty) private readonly specialtyRepository: Repository<Specialty>
-        
-    ) {}
-    
-    async getUsers(): Promise<Omit<User, "password">[]> {
-        const users = await this.usersRepository.find({
-            relations: ['professionalProfile', 'professionalProfile.specialty','membership']
-        });
-        const usersWithoutPassword = users.map(user => {
-            const { password, ...userWithoutPassword } = user; // Excluir el campo 'password'
-            return userWithoutPassword;
-        });
-        return usersWithoutPassword;
-
-    
+  async getUsers(): Promise<Omit<User, 'password'>[]> {
+    const users = await this.usersRepository.find({
+      relations: [
+        'professionalProfile',
+        'professionalProfile.specialty',
+        'membership',
+      ],
+    });
+    const usersWithoutPassword = users.map((user) => {
+      const { password, ...userWithoutPassword } = user; // Excluir el campo 'password'
+      return userWithoutPassword;
+    });
+    return usersWithoutPassword;
   }
 
-    async getUsersById(id: string): Promise<string | Omit<User, 'password'>> {
-        
-        const user = await this.usersRepository.findOne({
-            where: { id },
-            relations: ['professionalProfile','professionalProfile.specialty','membership', 'file'],
-
-        });
+  async getUsersById(id: string): Promise<string | Omit<User, 'password'>> {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: [
+        'professionalProfile',
+        'professionalProfile.specialty',
+        'membership',
+        'file',
+      ],
+    });
 
     if (!user) {
       throw new BadRequestException('Usuario no encontrado');
@@ -46,7 +50,7 @@ export class UsersRepository {
 
     // Excluir el campo 'password' del objeto de usuario
     const { password, ...userWithoutPassword } = user;
-    console.log (userWithoutPassword);
+    console.log(userWithoutPassword);
     return userWithoutPassword;
   }
 
@@ -60,13 +64,13 @@ export class UsersRepository {
     const existeEmail = await this.usersRepository.findOne({
       where: { email: users.email },
     });
-    if (existeEmail) throw new BadRequestException('Este email ya está en uso');
+    if (existeEmail) return;
 
     const existeDni = await this.usersRepository.findOne({
       where: { dni: users.dni },
     });
 
-    if (existeDni) throw new BadRequestException('Este dni ya está en uso');
+    if (existeDni) return;
     const hashedPassword = await bcrypt.hash(users.password, 10);
 
     if (!hashedPassword) {

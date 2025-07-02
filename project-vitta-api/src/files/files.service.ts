@@ -26,7 +26,7 @@ export class FilesService {
       throw new BadRequestException('Error al subir la imagen');
     }
 
-    const newFile = new Files(); 
+    const newFile = new Files();
     newFile.id = uuid();
     newFile.filename = imagencargada.display_name;
     newFile.mimetype = `${imagencargada.resource_type}/${imagencargada.format}`;
@@ -41,8 +41,7 @@ export class FilesService {
     return {
       message: 'Imagen subida correctamente',
       imgUrl: imagencargada.secure_url,
-      fileId: newFile.id
+      fileId: newFile.id,
     };
-
   }
 }

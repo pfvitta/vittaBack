@@ -1,4 +1,3 @@
-
 import {
   Injectable,
   CanActivate,
@@ -15,5 +14,5 @@ export class Auth0Guard implements CanActivate {
       throw new UnauthorizedException('Not authenticated');
     }
     return true;
-}
+  }
 }

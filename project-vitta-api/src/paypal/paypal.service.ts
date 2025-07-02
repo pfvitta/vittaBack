@@ -1,4 +1,4 @@
-// Este servicio maneja la creación y captura de órdenes de PayPal, así como el 
+// Este servicio maneja la creación y captura de órdenes de PayPal, así como el
 // registro de pagos en la base de datos.
 // También envía correos de confirmación al usuario después de un pago exitoso o cancelado.
 
@@ -123,14 +123,13 @@ export class PaypalService {
           });
           await this.membershipRepository.save(membership);
         }
-
       } else {
-        const payerEmail = result?.payer?.email_address || 'correo_no_disponible@vitta.com';
+        const payerEmail =
+          result?.payer?.email_address || 'correo_no_disponible@vitta.com';
         await envioConfirmacion('paymentCancel', payerEmail);
       }
 
       return result;
-
     } catch (error) {
       console.error('Error al capturar la orden:', error.message);
       throw new Error('No se pudo capturar el pago.');
