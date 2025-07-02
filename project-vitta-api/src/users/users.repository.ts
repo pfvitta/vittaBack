@@ -33,13 +33,16 @@ export class UsersRepository {
     return usersWithoutPassword;
   }
 
-    async getUsersById(id: string): Promise<string | Omit<User, 'password'>> {
-        
-        const user = await this.usersRepository.findOne({
-            where: { id },
-            relations: ['professionalProfile','professionalProfile.specialty','membership', 'file'],
-
-        });
+  async getUsersById(id: string): Promise<string | Omit<User, 'password'>> {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: [
+        'professionalProfile',
+        'professionalProfile.specialty',
+        'membership',
+        'file',
+      ],
+    });
 
     if (!user) {
       throw new BadRequestException('Usuario no encontrado');
@@ -47,7 +50,7 @@ export class UsersRepository {
 
     // Excluir el campo 'password' del objeto de usuario
     const { password, ...userWithoutPassword } = user;
-    console.log (userWithoutPassword);
+    console.log(userWithoutPassword);
     return userWithoutPassword;
   }
 
@@ -61,7 +64,7 @@ export class UsersRepository {
     const existeEmail = await this.usersRepository.findOne({
       where: { email: users.email },
     });
-    if (existeEmail)   return;;
+    if (existeEmail) return;
 
     const existeDni = await this.usersRepository.findOne({
       where: { dni: users.dni },
