@@ -1,0 +1,140 @@
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  Length,
+  IsPhoneNumber,
+  IsDateString,
+  Matches,
+  IsOptional,
+  IsArray,
+} from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+
+export class CreateAccountDto {
+  // ==== Campos comunes para todos los usuarios ====
+
+  @ApiProperty({ example: 'Juan Pérez', description: 'Nombre completo' })
+  @IsNotEmpty({ message: 'El nombre es obligatorio' })
+  @IsString({ message: 'El nombre debe ser una cadena de texto' })
+  @Length(3, 100, { message: 'El nombre debe tener entre 3 y 100 caracteres' })
+  name: string;
+
+  @ApiProperty({ example: 'correo@ejemplo.com' })
+  @IsEmail({}, { message: 'Debe ser un correo electrónico válido' })
+  @IsNotEmpty({ message: 'El correo es obligatorio' })
+  email: string;
+
+  @ApiProperty({ example: 'Abcde#123' })
+  @IsNotEmpty({ message: 'La contraseña es obligatoria' })
+  @IsString({ message: 'La contraseña debe ser una cadena de texto' })
+  @Length(6, 15, {
+    message: 'La contraseña debe tener entre 6 y 15 caracteres',
+  })
+  @Matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])/, {
+    message:
+      'La contraseña debe tener al menos una mayúscula, un número y un carácter especial',
+  })
+  password: string;
+
+  /**@ApiProperty({ example: 'Abcde#123' })
+  @IsNotEmpty({ message: 'La contraseña es obligatoria' })
+  @IsString({ message: 'La contraseña debe ser una cadena de texto' })
+  @Length(6, 15, {
+    message: 'La contraseña debe tener entre 6 y 15 caracteres',
+  })
+  @Matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])/, {
+    message:
+      'La contraseña debe tener al menos una mayúscula, un número y un carácter especial',
+  })
+  validatePassword: string; */
+
+  @ApiProperty({ example: '+49123456789' })
+  @IsNotEmpty({ message: 'El número de teléfono es obligatorio' })
+  // @IsPhoneNumber(undefined, {
+  //   message: 'Debe ser un número de teléfono válido',
+  // })
+  phone: string;
+
+  @ApiProperty({ example: '1234567890' })
+  @IsNotEmpty({ message: 'El número de documento es obligatorio' })
+  @Matches(/^\d{5,10}$/, {
+    message: 'El número de documento debe tener entre 5 y 10 dígitos',
+  })
+  dni: string;
+
+  @ApiProperty({
+    example: 'Bogotá',
+    description: 'Ciudad de recidencia',
+  })
+  @IsNotEmpty({ message: 'La ciudad de residencia es obligatorio' })
+  @IsString({ message: 'La ciudad de residencia debe ser texto' })
+  @Length(2, 50, { message: 'Debe tener entre 2 y 50 caracteres' })
+  city: string;
+
+  @ApiProperty({
+    example: '1993-08-15',
+    description: 'Fecha de nacimiento del usuario (formato YYYY-MM-DD)',
+  })
+  @IsNotEmpty({ message: 'La fecha de nacimiento es obligatoria' })
+  @IsDateString({}, { message: 'Debe ser una fecha válida (YYYY-MM-DD)' })
+  dob: Date;
+
+  @ApiProperty({
+    example: 'user',
+    description: 'Rol del usuario (ej: admin, profesional, user)',
+  })
+  @IsNotEmpty({ message: 'El rol es obligatorio' })
+  @IsString({ message: 'El rol debe ser una cadena de texto' })
+  role: string;
+
+  // ==== Campos opcionales del perfil profesional ====
+
+  @ApiProperty({ example: 'Experto en nutrición...', required: false })
+  @IsOptional()
+  @IsString({ message: 'La biografía debe ser texto' })
+  @Length(10, 1000, {
+    message: 'La biografía debe tener entre 10 y 1000 caracteres',
+  })
+  biography?: string;
+
+  @ApiProperty({ example: '10 años de experiencia...', required: false })
+  @IsOptional()
+  @IsString({ message: 'La experiencia debe ser texto' })
+  @Length(10, 500, {
+    message: 'La experiencia debe tener entre 10 y 1000 caracteres',
+  })
+  experience?: string;
+
+  @ApiProperty({
+    description: 'Número de matrícula profesional',
+    example: 'AB-12345',
+    required: false,
+  })
+  @IsOptional()
+  @IsString({ message: 'El número de matrícula debe ser una cadena de texto.' })
+  @Length(6, 20, {
+    message: 'El número de matrícula debe tener entre 6 y 20 caracteres.',
+  })
+  licenseNumber?: string;
+
+  @ApiProperty({
+    description: 'Área de especialización',
+    example: 'DIABETES',
+  })
+
+  // @IsOptional()
+  // @IsString({ message: 'La especialidad debe ser un texto válido' })
+  // specialty?: string[];
+  @ApiProperty({
+    description: 'Áreas de especialización (si es profesional)',
+    example: ['DIABETES', 'OBESIDAD'],
+    required: false,
+    isArray: true,
+    type: String,
+  })
+  @IsOptional()
+  @IsArray({ message: 'La especialidad debe ser un arreglo' })
+  @IsString({ each: true, message: 'Cada especialidad debe ser texto' })
+  specialty?: string[];
+}
