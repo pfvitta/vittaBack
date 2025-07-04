@@ -38,7 +38,7 @@ export class AuthController {
   }
 
   /**    const returnTo = encodeURIComponent('http://localhost:3000/');
-    const logoutUrl = `https://${process.env.AUTH0_DOMAIN}/v2/logout?client_id=${process.env.AUTH0_CLIENT_ID}&returnTo=${returnTo}&federated=true`;
+    const logoutUrl = https://${process.env.AUTH0_DOMAIN}/v2/logout?client_id=${process.env.AUTH0_CLIENT_ID}&returnTo=${returnTo}&federated=true;
 
     return res.redirect(logoutUrl); // redirige al logout global de Auth0 */
 

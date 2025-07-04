@@ -42,6 +42,32 @@ export class StripeService {
     };
   }
 
+  async createCheckoutSession(email: string) {
+  const session = await this.stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    mode: 'payment',
+    customer_email: email,
+    line_items: [
+      {
+        price_data: {
+          currency: 'usd',
+          unit_amount: 4999, // $49.99 en centavos
+          product_data: {
+            name: 'Membresía Premium',
+            description: 'Acceso ilimitado a contenido premium',
+          },
+        },
+        quantity: 1,
+      },
+    ],
+    success_url: `${process.env.CLIENT_URL}/success`,
+    cancel_url: `${process.env.CLIENT_URL}/cancel`,
+  });
+
+  return { url: session.url };
+}
+
+
   async handleSuccessfulPayment(intent: Stripe.PaymentIntent): Promise<void> {
       const paymentIntent = await this.stripe.paymentIntents.retrieve(intent.id, {
         expand: ['charges'],
@@ -136,3 +162,5 @@ export class StripeService {
   }
 
 }
+
+

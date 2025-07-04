@@ -24,10 +24,10 @@ import { Files } from './common/entities/files.entity';
 import { FilesModule } from './files/files.module';
 import { StripeModule } from './stripe/stripe.module';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({
+      envFilePath: '.env.development',
       isGlobal: true,
       load: [typeOrmConfig],
       validationSchema,
@@ -62,7 +62,7 @@ import { StripeModule } from './stripe/stripe.module';
     AdminModule,
     PaypalModule,
     FilesModule,
-    StripeModule
+    StripeModule,
   ],
   controllers: [AppController],
   providers: [AppService, SpecialtySeederService, ProfessionalsSeederService],
