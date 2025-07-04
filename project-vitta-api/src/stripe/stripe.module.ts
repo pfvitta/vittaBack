@@ -8,9 +8,7 @@ import { Membership } from '../common/entities/membership.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([Payment, User, Membership])
-      ],
+  imports: [TypeOrmModule.forFeature([Payment, User, Membership])],
   providers: [StripeService],
   controllers: [StripeController],
 })

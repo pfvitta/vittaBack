@@ -63,8 +63,8 @@ async createCheckoutSession(@Body('email') email: string) {
         break;
       }
 
-  default:
-    console.log(`📦 Evento sin manejar: ${event.type}`);
+      default:
+        console.log(`📦 Evento sin manejar: ${event.type}`);
     }
     res.json({ received: true });
   }

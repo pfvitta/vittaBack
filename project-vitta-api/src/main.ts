@@ -3,8 +3,8 @@ import { AppModule } from './app.module';
 import { LoggerGlobal } from './common/middleware/logger.middleware';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
-import { auth } from 'express-openid-connect';
-import { config as auth0Config } from './config/auth0.config';
+//import { auth } from 'express-openid-connect';
+//import { config as auth0Config } from './config/auth0.config';
 //import { AuthGuard } from './common/guards/auth.guard';
 import * as express from 'express';
 
@@ -17,7 +17,11 @@ async function bootstrap() {
     credentials: true,
   });
 
+<<<<<<< HEAD
   app.use(auth(auth0Config));
+=======
+  //app.use(auth(auth0Config));
+>>>>>>> 024bc6cbb06591ae5be0325f0f51d89eb21b998f
   app.use('/stripe/webhook', express.raw({ type: '*/*' }));
 
   app.useGlobalPipes(

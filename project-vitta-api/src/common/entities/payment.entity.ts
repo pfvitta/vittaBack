@@ -14,13 +14,13 @@ export class Payment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type:'varchar', nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   paypalOrderId?: string; // solo aplica a PayPal
 
-  @Column({ type:'varchar',nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   captureId?: string; // solo aplica a PayPal
 
-  @Column({ type:'varchar',nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   stripePaymentIntentId?: string | null; // solo aplica a Stripe
 
   @Column()

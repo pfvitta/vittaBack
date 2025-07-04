@@ -1,17 +1,17 @@
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
+
 import { AuthService } from './auth.service';
-import { UsersService } from 'src/users/users.service';
-import { UserCredentialDto } from 'src/common/dtos/userCredential.dto';
-import { Request, Response } from 'express';
-import { Auth0Guard } from 'src/common/guards/auth0.guard';
+import { UsersService } from '../users/users.service';
+import { UserCredentialDto } from '../common/dtos/userCredential.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly usersService: UsersService
+    private readonly usersService: UsersService,
   ) {}
 
+<<<<<<< HEAD
   @Get('login')
   async login(@Res() res: Response) {
     try {
@@ -55,9 +55,11 @@ export class AuthController {
     return req.oidc.user; 
   }
 
+=======
+>>>>>>> 024bc6cbb06591ae5be0325f0f51d89eb21b998f
   @Post('signup')
   async signup(@Body() createUser: any) {
-    return await this.usersService.createUser(createUser); 
+    return await this.usersService.createUser(createUser);
   }
 
   @Post('signin')
