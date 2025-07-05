@@ -24,6 +24,11 @@ export class StripeController {
     return this.stripeService.createPaymentIntent(49.99, 'usd', email);
   }
 
+  @Post('create-checkout-session')
+async createCheckoutSession(@Body('email') email: string) {
+  return this.stripeService.createCheckoutSession(email);
+}
+
   @Post('webhook')
   @HttpCode(200)
   async handleWebhook(
