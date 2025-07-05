@@ -7,6 +7,7 @@ import { BadRequestException, ValidationPipe } from '@nestjs/common';
 //import { config as auth0Config } from './config/auth0.config';
 //import { AuthGuard } from './common/guards/auth.guard';
 import * as express from 'express';
+import { HourHandController } from './hour-hand/hour-hand.controller';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -49,6 +50,10 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
+
+  const precargaHourHand = app.get(HourHandController);
+
+  await precargaHourHand.hourHand();
 
   await app.listen(process.env.PORT ?? 4000);
 }
