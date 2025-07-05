@@ -17,11 +17,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-<<<<<<< HEAD
-  app.use(auth(auth0Config));
-=======
   //app.use(auth(auth0Config));
->>>>>>> 024bc6cbb06591ae5be0325f0f51d89eb21b998f
   app.use('/stripe/webhook', express.raw({ type: '*/*' }));
 
   app.useGlobalPipes(

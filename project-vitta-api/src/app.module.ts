@@ -65,6 +65,7 @@ import { AdminSeederService } from './helper/admin.seed';
     PaypalModule,
     FilesModule,
     StripeModule,
+    AdminModule
   ],
   controllers: [AppController],
   providers: [AppService, SpecialtySeederService, ProfessionalsSeederService, AdminSeederService],
