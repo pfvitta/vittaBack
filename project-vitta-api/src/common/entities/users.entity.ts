@@ -11,6 +11,7 @@ import { Membership } from './membership.entity';
 import { ProfessionalProfile } from './professionalProfile.entity';
 import { Specialty } from './specialty.entity';
 import { Files } from './files.entity';
+import { Appointment } from './appointment.entity';
 
 /**
  * Entidad para usuarios del sistema
@@ -77,4 +78,7 @@ export class User {
   @OneToOne(() => Files, { cascade: true, eager: true })
   @JoinColumn() // esta decorador indica que esta entidad es la "dueña" de la relación
   file: Files;
+
+  @OneToMany(() => Appointment, (appointment) => appointment.user)
+  appointments: Appointment[];
 }

@@ -14,6 +14,6 @@ export class HourHandRepository {
   }
 
   async hourHand(item: Partial<Schedule>) {
-    return await this.scheduleRepository.save(item);
+    return await this.scheduleRepository.save({ hourHand: item.hourHand });
   }
 }
