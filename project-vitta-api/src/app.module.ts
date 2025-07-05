@@ -23,11 +23,17 @@ import { User } from './common/entities/users.entity';
 import { Files } from './common/entities/files.entity';
 import { FilesModule } from './files/files.module';
 import { StripeModule } from './stripe/stripe.module';
+
 import { HourHandModule } from './hour-hand/hour-hand.module';
+
+import { Admin } from './common/entities/admin.entity';
+import { AdminSeederService } from './helper/admin.seed';
+
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      envFilePath: '.env.development',
       isGlobal: true,
       load: [typeOrmConfig],
       validationSchema,
@@ -42,7 +48,7 @@ import { HourHandModule } from './hour-hand/hour-hand.module';
     }),
 
     // 👇 Conexión de la entidad Specialty para que el Seeder tenga acceso
-    TypeOrmModule.forFeature([Specialty, ProfessionalProfile, User, Files]),
+    TypeOrmModule.forFeature([Specialty, ProfessionalProfile, User, Files, Admin]),
 
     JwtModule.registerAsync({
       global: true,
@@ -63,9 +69,13 @@ import { HourHandModule } from './hour-hand/hour-hand.module';
     PaypalModule,
     FilesModule,
     StripeModule,
+
     HourHandModule,
+
+    AdminModule
+
   ],
   controllers: [AppController],
-  providers: [AppService, SpecialtySeederService, ProfessionalsSeederService],
+  providers: [AppService, SpecialtySeederService, ProfessionalsSeederService, AdminSeederService],
 })
 export class AppModule {}
