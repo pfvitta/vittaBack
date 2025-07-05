@@ -23,8 +23,12 @@ import { User } from './common/entities/users.entity';
 import { Files } from './common/entities/files.entity';
 import { FilesModule } from './files/files.module';
 import { StripeModule } from './stripe/stripe.module';
+
+import { HourHandModule } from './hour-hand/hour-hand.module';
+
 import { Admin } from './common/entities/admin.entity';
 import { AdminSeederService } from './helper/admin.seed';
+
 
 @Module({
   imports: [
@@ -65,7 +69,11 @@ import { AdminSeederService } from './helper/admin.seed';
     PaypalModule,
     FilesModule,
     StripeModule,
+
+    HourHandModule,
+
     AdminModule
+
   ],
   controllers: [AppController],
   providers: [AppService, SpecialtySeederService, ProfessionalsSeederService, AdminSeederService],

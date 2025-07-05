@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from './users.entity';
 import { Specialty } from './specialty.entity';
+import { Appointment } from './appointment.entity';
 
 @Entity({
   name: 'professional_profiles',
@@ -56,4 +57,7 @@ export class ProfessionalProfile {
   @ManyToMany(() => Specialty, { cascade: true })
   @JoinTable() // Este decorador crea la tabla intermedia
   specialty: Specialty[];
+
+  @OneToMany(() => Appointment, (appointment) => appointment.professional)
+  appointments: Appointment[];
 }
