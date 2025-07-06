@@ -30,7 +30,7 @@ import { AdminSeederService } from './helper/admin.seed';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env.development',
+      //envFilePath: '.env.development',
       isGlobal: true,
       load: [typeOrmConfig],
       validationSchema,
@@ -53,7 +53,15 @@ import { AdminSeederService } from './helper/admin.seed';
       Admin,
     ]),
 
-    JwtModule.registerAsync({
+    JwtModule.register({
+      global: true,
+      signOptions: {
+        expiresIn: '1h',
+      },
+      secret: process.env.JWT_SECRET,
+    }),
+
+    /**    JwtModule.registerAsync({
       global: true,
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -62,6 +70,7 @@ import { AdminSeederService } from './helper/admin.seed';
         signOptions: { expiresIn: '1h' },
       }),
     }),
+ */
 
     AuthModule,
     UsersModule,

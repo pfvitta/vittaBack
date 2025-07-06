@@ -3,6 +3,7 @@ import { AuthRepository } from './auth.repository';
 import { UserCredentialDto } from '../common/dtos/userCredential.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { JwtPayloadDto } from 'src/common/dtos/jwtPayload.dto';
 
 @Injectable()
 export class AuthService {
@@ -33,15 +34,15 @@ export class AuthService {
 
     // Genracion del token.
 
-    const userPayload = {
+    const userPayload: JwtPayloadDto = {
       sub: validateEmail.id,
       id: validateEmail.id,
       email: validateEmail.email,
-      role: validateEmail.role,
+      roles: validateEmail.role,
     };
 
     const token = this.jwtService.sign(userPayload);
-
+    console.log('Se genera token:', token);
     return { succes: 'User logged in succesfully', token };
   }
 }
