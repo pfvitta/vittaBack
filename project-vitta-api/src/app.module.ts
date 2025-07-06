@@ -25,7 +25,7 @@ import { FilesModule } from './files/files.module';
 import { StripeModule } from './stripe/stripe.module';
 
 import { Admin } from './common/entities/admin.entity';
-//import { AdminSeederService } from './helper/admin.seed';
+import { AdminSeederService } from './helper/admin.seed';
 
 @Module({
   imports: [
@@ -80,7 +80,7 @@ import { Admin } from './common/entities/admin.entity';
     AppService,
     SpecialtySeederService,
     ProfessionalsSeederService,
-    // AdminSeederService,
+    AdminSeederService,
   ],
 })
 export class AppModule {}

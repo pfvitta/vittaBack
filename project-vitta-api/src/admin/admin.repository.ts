@@ -11,7 +11,7 @@ export class AdminRepository {
     private readonly adminRepository: Repository<Admin>,
   ) {}
 
-  /** async existsAdmin(credentials: UserCredentialDto): Promise<boolean> {
+  async existsAdmin(credentials: UserCredentialDto): Promise<boolean> {
     const user = await this.adminRepository.findOne({
       where: { email: credentials.email },
     });
@@ -25,5 +25,5 @@ export class AdminRepository {
     }
 
     return true;
-  } */
+  }
 }

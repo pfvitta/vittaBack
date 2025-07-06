@@ -1,4 +1,4 @@
-/**import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Admin } from '../common/entities/admin.entity';
@@ -20,4 +20,4 @@ export class AdminSeederService implements OnApplicationBootstrap {
     await this.adminRepo.save(admin);
     console.log('🌱 Seed de admin completado.');
   }
-} */
+}
