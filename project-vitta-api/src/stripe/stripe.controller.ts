@@ -25,9 +25,9 @@ export class StripeController {
   }
 
   @Post('create-checkout-session')
-async createCheckoutSession(@Body('email') email: string) {
-  return this.stripeService.createCheckoutSession(email);
-}
+  async createCheckoutSession(@Body('email') email: string) {
+    return this.stripeService.createCheckoutSession(email);
+  }
 
   @Post('webhook')
   @HttpCode(200)
@@ -49,30 +49,30 @@ async createCheckoutSession(@Body('email') email: string) {
     }
 
     switch (event.type) {
-  // case 'payment_intent.succeeded': {
-  //   const intent = event.data.object as Stripe.PaymentIntent;
-  //   console.log('✅ Pago exitoso (intent):', intent.id);
-  //   await this.stripeService.handleSuccessfulPayment(intent);
-  //   break;
-  // }
+      // case 'payment_intent.succeeded': {
+      //   const intent = event.data.object as Stripe.PaymentIntent;
+      //   console.log('✅ Pago exitoso (intent):', intent.id);
+      //   await this.stripeService.handleSuccessfulPayment(intent);
+      //   break;
+      // }
 
-  case 'checkout.session.completed': {
-    const session = event.data.object as Stripe.Checkout.Session;
-    console.log('✅ Sesión completada:', session.id);
-    await this.stripeService.handleCheckoutSessionCompleted(session);
-    break;
-  }
+      case 'checkout.session.completed': {
+        const session = event.data.object as Stripe.Checkout.Session;
+        console.log('✅ Sesión completada:', session.id);
+        await this.stripeService.handleCheckoutSessionCompleted(session);
+        break;
+      }
 
-  case 'payment_intent.payment_failed': {
-    const intent = event.data.object as Stripe.PaymentIntent;
-    console.error('❌ Pago fallido');
-    await this.stripeService.handleFailedPayment(intent);
-    break;
-  }
+      case 'payment_intent.payment_failed': {
+        const intent = event.data.object as Stripe.PaymentIntent;
+        console.error('❌ Pago fallido');
+        await this.stripeService.handleFailedPayment(intent);
+        break;
+      }
 
-  default:
-    console.log(`📦 Evento sin manejar: ${event.type}`);
-}
+      default:
+        console.log(`📦 Evento sin manejar: ${event.type}`);
+    }
 
     res.json({ received: true });
   }

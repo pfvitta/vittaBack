@@ -8,7 +8,7 @@ import {
   IsUrl,
 } from 'class-validator';
 
-export class JwtPayloadDto {
+export class JwtPayloadAuth0Dto {
   @ApiProperty({
     example: 'https://dev-xxxxxx.us.auth0.com/',
     description: 'Issuer (dominio de Auth0)',
@@ -24,7 +24,7 @@ export class JwtPayloadDto {
   sub: string;
 
   @ApiProperty({
-    example: 'https://vitta-api.com',
+    example: 'https://dev-q0aqr87w7eu1wqet.us.auth0.com/api/v2/',
     description: 'Audiencia del token (API Identifier)',
   })
   @IsString()
@@ -89,4 +89,14 @@ export class JwtPayloadDto {
   @IsOptional()
   @IsString()
   ['https://vitta.com/role']?: string;
+
+  @ApiProperty({
+    example: ['admin'],
+    description: 'Lista de roles normalizada para el backend',
+    required: false,
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  roles?: string[];
 }

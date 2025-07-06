@@ -5,6 +5,7 @@ import { User } from '../common/entities/users.entity';
 import { ProfessionalProfile } from '../common/entities/professionalProfile.entity';
 import { Specialty } from '../common/entities/specialty.entity';
 import * as bcrypt from 'bcrypt';
+import { Role } from '../common/enums/roles.enum';
 
 @Injectable()
 export class ProfessionalsSeederService implements OnApplicationBootstrap {
@@ -42,7 +43,7 @@ export class ProfessionalsSeederService implements OnApplicationBootstrap {
         city: 'Campeche',
         dob: '2002-01-01',
         password: 'Asdfg1234%',
-        role: 'provider',
+        role: Role.Provider,
         biography:
           'Especialista en nutrición vegana con enfoque integral en el bienestar físico y emocional del paciente.  Apasionada por la educación nutricional y la promoción de estilos de vida sostenibles.',
         experience: '10 años de experiencia en nutrición clínica',
@@ -57,7 +58,7 @@ export class ProfessionalsSeederService implements OnApplicationBootstrap {
         city: 'Monterrey',
         dob: '1990-03-21',
         password: 'Asdfg1234%',
-        role: 'provider',
+        role: Role.Provider,
         biography:
           'Nutriólogo especializado en el tratamiento de trastornos alimenticios, incluyendo anorexia, bulimia y trastorno por atracón.',
         experience: '12 años trabajando con adolescentes',
@@ -72,7 +73,7 @@ export class ProfessionalsSeederService implements OnApplicationBootstrap {
         city: 'Guadalajara',
         dob: '1985-07-15',
         password: 'Asdfg1234%',
-        role: 'provider',
+        role: Role.Provider,
         biography:
           'Especialista en salud hormonal, con énfasis en el abordaje nutricional de trastornos tiroideos como hipotiroidismo e hipertiroidismo. Intervención metabólica para adultos con sobrepeso y obesidad.',
         experience: '15 años en hospitales privados',

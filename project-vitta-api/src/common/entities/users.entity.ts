@@ -12,6 +12,7 @@ import { ProfessionalProfile } from './professionalProfile.entity';
 import { Specialty } from './specialty.entity';
 import { Files } from './files.entity';
 import { Appointment } from './appointment.entity';
+import { Role } from '../enums/roles.enum';
 
 /**
  * Entidad para usuarios del sistema
@@ -63,8 +64,8 @@ export class User {
   createAt: Date;
 
   // Rol del usuario (ej: admin, profesional, user)
-  @Column({ type: 'varchar', length: 11, nullable: false })
-  role: string;
+  @Column({ type: 'enum', enum: Role, nullable: false })
+  role: Role;
 
   @OneToOne(() => Membership, (membership) => membership.user)
   membership: Membership;
