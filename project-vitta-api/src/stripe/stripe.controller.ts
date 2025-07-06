@@ -49,23 +49,31 @@ async createCheckoutSession(@Body('email') email: string) {
     }
 
     switch (event.type) {
-      case 'payment_intent.succeeded': {
-        const intent = event.data.object as Stripe.PaymentIntent;
-        console.log('✅ Pago exitoso:', intent.id);
-        await this.stripeService.handleSuccessfulPayment(intent);
-        break;
-      }
+  // case 'payment_intent.succeeded': {
+  //   const intent = event.data.object as Stripe.PaymentIntent;
+  //   console.log('✅ Pago exitoso (intent):', intent.id);
+  //   await this.stripeService.handleSuccessfulPayment(intent);
+  //   break;
+  // }
 
-      case 'payment_intent.payment_failed': {
-        const intent = event.data.object as Stripe.PaymentIntent;
-        console.error('❌ Pago fallido');
-        await this.stripeService.handleFailedPayment(intent);
-        break;
-      }
+  case 'checkout.session.completed': {
+    const session = event.data.object as Stripe.Checkout.Session;
+    console.log('✅ Sesión completada:', session.id);
+    await this.stripeService.handleCheckoutSessionCompleted(session);
+    break;
+  }
 
-      default:
-        console.log(`📦 Evento sin manejar: ${event.type}`);
-    }
+  case 'payment_intent.payment_failed': {
+    const intent = event.data.object as Stripe.PaymentIntent;
+    console.error('❌ Pago fallido');
+    await this.stripeService.handleFailedPayment(intent);
+    break;
+  }
+
+  default:
+    console.log(`📦 Evento sin manejar: ${event.type}`);
+}
+
     res.json({ received: true });
   }
 }

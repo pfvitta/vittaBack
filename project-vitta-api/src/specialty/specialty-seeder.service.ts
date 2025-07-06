@@ -28,6 +28,6 @@ export class SpecialtySeederService implements OnApplicationBootstrap {
     ]);
 
     await this.specialtyRepo.save(specialties);
-    console.log('✅ Especialidades insertadas automáticamente al iniciar.');
+    console.log('🌱 Seed de especialidades completado.');
   }
 }
