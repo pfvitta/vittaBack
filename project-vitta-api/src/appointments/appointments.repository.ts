@@ -30,7 +30,7 @@ export class AppointmentsRepository {
    * @param appointments - DTO con los datos completos del turno a validar.
    * @returns El turno encontrado, si existe.
    */
-  async validateAppointment(appointments: CreateAppointmentDto) {
+  async validateAppointments(appointments: CreateAppointmentDto) {
     return await this.appointmentRepository.findOne({
       where: {
         userId: appointments.userId,
@@ -47,7 +47,6 @@ export class AppointmentsRepository {
    * @param appointments - DTO con los datos necesarios para crear el turno.
    * @returns El turno creado.
    */
-  async;
   async createAppointment(appointments: CreateAppointmentDto) {
     return await this.appointmentRepository.save(appointments);
   }

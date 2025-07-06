@@ -6,8 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Admin } from '../common/entities/admin.entity';
 
 @Module({
-  imports: [ TypeOrmModule.forFeature([Admin]) ],
-  controllers: [AdminController], 
+  imports: [TypeOrmModule.forFeature([Admin])],
+  controllers: [AdminController],
   providers: [AdminService, AdminRepository],
 })
 export class AdminModule {}

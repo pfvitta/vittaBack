@@ -1,8 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBody, ApiResponse } from '@nestjs/swagger';
 import { AppointmentsService } from './appointments.service';
 import { ValidateAppointmentDto } from '../common/dtos/validateAppointment.dto';
 import { CreateAppointmentDto } from 'src/common/dtos/createAppointment.dto';
+import { AvailableHourDto } from '../common/dtos/horus.dto';
+import { Appointment } from '../common/entities/appointment.entity';
 
 @ApiTags('Appointments')
 @Controller('appointments')
@@ -15,9 +17,18 @@ export class AppointmentsController {
    */
   @Post('validate')
   @ApiOperation({
-    summary: 'Consultar disponibilidad',
+    summary: 'Consultar horarios disponibles para hoy',
     description:
-      'Devuelve las franjas horarias disponibles hoy para un profesional.',
+      'Devuelve los horarios libres de un profesional para la fecha actual. No permite turnos los fines de semana.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Horarios disponibles retornados con éxito.',
+    type: AvailableHourDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Solo se permiten turnos de lunes a viernes.',
   })
   @ApiBody({ type: ValidateAppointmentDto })
   async validateAppointment(@Body() provider: ValidateAppointmentDto) {
@@ -35,8 +46,20 @@ export class AppointmentsController {
     summary: 'Crear turno',
     description: 'Registra un nuevo turno si la franja horaria está libre.',
   })
+  @ApiResponse({
+    status: 201,
+    description: 'Turno creado exitosamente',
+    type: Appointment, // o AppointmentResponseDto si prefieres DTOs para respuesta
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Datos inválidos (fecha u hora fuera del rango permitido)',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Ya existe un turno en esa franja horaria',
+  })
   @ApiBody({ type: CreateAppointmentDto })
-  @Post('create')
   async createAppointment(@Body() appointments: CreateAppointmentDto) {
     return await this.appointmentsService.createAppointment(appointments);
   }
