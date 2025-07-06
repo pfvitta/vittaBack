@@ -24,11 +24,8 @@ import { Files } from './common/entities/files.entity';
 import { FilesModule } from './files/files.module';
 import { StripeModule } from './stripe/stripe.module';
 
-import { HourHandModule } from './hour-hand/hour-hand.module';
-
 import { Admin } from './common/entities/admin.entity';
-import { AdminSeederService } from './helper/admin.seed';
-
+//import { AdminSeederService } from './helper/admin.seed';
 
 @Module({
   imports: [
@@ -48,7 +45,13 @@ import { AdminSeederService } from './helper/admin.seed';
     }),
 
     // 👇 Conexión de la entidad Specialty para que el Seeder tenga acceso
-    TypeOrmModule.forFeature([Specialty, ProfessionalProfile, User, Files, Admin]),
+    TypeOrmModule.forFeature([
+      Specialty,
+      ProfessionalProfile,
+      User,
+      Files,
+      Admin,
+    ]),
 
     JwtModule.registerAsync({
       global: true,
@@ -70,12 +73,14 @@ import { AdminSeederService } from './helper/admin.seed';
     FilesModule,
     StripeModule,
 
-    HourHandModule,
-
-    AdminModule
-
+    AdminModule,
   ],
   controllers: [AppController],
-  providers: [AppService, SpecialtySeederService, ProfessionalsSeederService, AdminSeederService],
+  providers: [
+    AppService,
+    SpecialtySeederService,
+    ProfessionalsSeederService,
+    // AdminSeederService,
+  ],
 })
 export class AppModule {}

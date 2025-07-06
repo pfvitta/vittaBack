@@ -6,10 +6,9 @@ import { UserCredentialDto } from '../common/dtos/userCredential.dto';
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
-  @Post('login')
-  async signin (@Body() loginUser: UserCredentialDto) {
+  /** @Post('login')
+  async signin(@Body() loginUser: UserCredentialDto) {
     console.log('Login controller:', loginUser);
     return await this.adminService.signin(loginUser);
-  } 
-
+  } */
 }

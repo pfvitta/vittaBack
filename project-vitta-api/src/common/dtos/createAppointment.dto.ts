@@ -37,7 +37,7 @@ export class CreateAppointmentDto {
   date: Date;
 
   @ApiProperty({
-    example: '14:30',
+    example: '14:00:00',
     description: 'Hora del turno en formato HH:mm (24h)',
   })
   @IsNotEmpty({ message: 'La hora del turno es obligatoria' })
