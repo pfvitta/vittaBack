@@ -26,6 +26,9 @@ import { StripeModule } from './stripe/stripe.module';
 
 import { Admin } from './common/entities/admin.entity';
 import { AdminSeederService } from './helper/admin.seed';
+import { NutritionModule } from './nutrition/nutrition.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -81,8 +84,12 @@ import { AdminSeederService } from './helper/admin.seed';
     PaypalModule,
     FilesModule,
     StripeModule,
-
     AdminModule,
+    NutritionModule,
+
+    ScheduleModule.forRoot(),
+    TasksModule,
+    
   ],
   controllers: [AppController],
   providers: [
