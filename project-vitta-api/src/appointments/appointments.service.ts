@@ -29,13 +29,13 @@ export class AppointmentsService {
    * @returns Arreglo de objetos con los horarios disponibles para hoy.
    */
   async validateAppointment(provider: ValidateAppointmentDto) {
-    const dateToday = new Date();
+    const fecha = new Date(provider.date);
 
-    console.log('hora:', dateToday.getHours());
+    console.log('hora:', fecha.getHours());
 
     // 🚫 Validación: No se permiten turnos fuera del horario laboral ni fines de semana
-    const hora = dateToday.getHours();
-    const dia = dateToday.getDay(); // Domingo: 0, Sábado: 6
+    const hora = fecha.getHours();
+    const dia = fecha.getDay(); // Domingo: 0, Sábado: 6
 
     if (hora > 17 || dia === 0 || dia === 6) {
       throw new BadRequestException({
@@ -53,21 +53,22 @@ export class AppointmentsService {
 
     // 📆 Fecha formateada sin hora (YYYY-MM-DD en local)
     const formatteddate = new Date(
-      dateToday.getFullYear(),
-      dateToday.getMonth(),
-      dateToday.getDate(),
+      fecha.getFullYear(),
+      fecha.getMonth(),
+      fecha.getDate(),
     );
 
-    // 🗂️ Armar datos de la consulta
+    provider.date = formatteddate;
+    /**   // 🗂️ Armar datos de la consulta
     const datosConsulta = {
       professionalId: provider.professionalId,
       date: formatteddate,
-    };
+    }; */
 
     // 🔍 Buscar turnos ya tomados por el profesional en la fecha actual
     const validatedate =
       await this.appointmentsRepository.validateAppointmentProfessional(
-        datosConsulta,
+        provider,
       );
 
     // ✅ Si no hay turnos aún, devolver todos los horarios disponibles
