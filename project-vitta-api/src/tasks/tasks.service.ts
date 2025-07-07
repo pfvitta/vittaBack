@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { User } from '../common/entities/users.entity';
 import { NutritionArticles } from '../common/entities/nutritionArticle.entity';
 import { envioConfirmacion } from '../helper/serviceMail/serviceMail'; 
+import { Role } from '../common/enums/roles.enum';
+
 
 @Injectable()
 export class TasksService {
@@ -32,7 +34,7 @@ export class TasksService {
     }
 
     const users = await this.userRepo.find({
-      where: { role: 'user' },
+      where: { role: Role.User },
     });
 
     for (const user of users) {
