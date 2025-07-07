@@ -1,12 +1,7 @@
-import { IsNotEmpty, IsUUID } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { PickType } from '@nestjs/swagger';
+import { CreateAppointmentDto } from './createAppointment.dto';
 
-export class ValidateAppointmentDto {
-  @ApiProperty({
-    example: 'efbaee97-0094-4e10-91a7-68c2f4a13855',
-    description: 'UUID v4 del profesional para validar sus turnos',
-  })
-  @IsNotEmpty()
-  @IsUUID('4')
-  professionalId: string;
-}
+export class ValidateAppointmentDto extends PickType(CreateAppointmentDto, [
+  'professionalId',
+  'date',
+]) {}
