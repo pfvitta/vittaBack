@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  NotFoundException,
   Post,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -26,5 +27,20 @@ export class UsersController {
   @Post('register')
   createUser(@Body() user: CreateAccountDto) {
     return this.usersService.createUser(user);
+  }
+
+  // GET /users/exists/:email
+  @Get('exists/:email')
+  async userExists(@Param('email') email: string) {
+    const exists = await this.usersService.getUserByEmail(email);
+    if (!exists) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+    return { exists: true };
+  }
+
+  @Get('by-email/:email')
+  getUserByEmail(@Param('email') email: string) {
+    return this.usersService.getUserByEmail(email);
   }
 }
