@@ -29,6 +29,8 @@ import { AdminSeederService } from './helper/admin.seed';
 import { NutritionModule } from './nutrition/nutrition.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './tasks/tasks.module';
+import { WsGateway } from './ws/ws.gateway';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -89,6 +91,7 @@ import { TasksModule } from './tasks/tasks.module';
 
     ScheduleModule.forRoot(),
     TasksModule,
+    ChatModule,
     
   ],
   controllers: [AppController],
@@ -97,6 +100,7 @@ import { TasksModule } from './tasks/tasks.module';
     SpecialtySeederService,
     ProfessionalsSeederService,
     AdminSeederService,
+    WsGateway
   ],
 })
 export class AppModule {}
