@@ -93,7 +93,7 @@ export class ProfessionalsSeederService implements OnApplicationBootstrap {
         city: prof.city,
         dob: new Date(prof.dob),
         role: prof.role,
-        status: 'Inactive',
+        status: 'Active',
         createdAt: new Date(),
       };
       const savedUser = await this.userRepo.save(user);

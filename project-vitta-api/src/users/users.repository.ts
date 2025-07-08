@@ -93,6 +93,9 @@ export class UsersRepository {
       throw new BadRequestException('Error al crear usuario. Intente nuevamente.');
     }
 
+    let colocarStatus = 'Inactive';
+    if (users.role !== 'provider') colocarStatus = 'Active';
+
     const user: any = {
       name: users.name,
       email: users.email,
@@ -102,7 +105,7 @@ export class UsersRepository {
       city: users.city,
       dob: users.dob || new Date(),
       createdAt: new Date(),
-      status: 'Active',
+      status: colocarStatus,
       role: users.role,
     };
 
