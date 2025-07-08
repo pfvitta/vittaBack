@@ -40,7 +40,11 @@ export class UsersController {
   }
 
   @Get('by-email/:email')
-  getUserByEmail(@Param('email') email: string) {
-    return this.usersService.getUserByEmail(email);
+  async getUserByEmail(@Param('email') email: string) {
+    const user = await this.usersService.getUserByEmail(email);
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+    return user;
   }
 }
