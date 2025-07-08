@@ -15,6 +15,10 @@ export class UsersService {
     return this.usersRepository.getUsers();
   }
 
+  cambioStatus(id: string) {
+    return this.usersRepository.cambioStatus(id);
+  }
+
   createUser(user: CreateAccountDto) {
     return this.usersRepository.createUser(user);
   }

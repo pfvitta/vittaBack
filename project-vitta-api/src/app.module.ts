@@ -26,6 +26,11 @@ import { StripeModule } from './stripe/stripe.module';
 
 import { Admin } from './common/entities/admin.entity';
 import { AdminSeederService } from './helper/admin.seed';
+import { NutritionModule } from './nutrition/nutrition.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TasksModule } from './tasks/tasks.module';
+import { WsGateway } from './ws/ws.gateway';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -81,8 +86,13 @@ import { AdminSeederService } from './helper/admin.seed';
     PaypalModule,
     FilesModule,
     StripeModule,
-
     AdminModule,
+    NutritionModule,
+
+    ScheduleModule.forRoot(),
+    TasksModule,
+    ChatModule,
+    
   ],
   controllers: [AppController],
   providers: [
@@ -90,6 +100,7 @@ import { AdminSeederService } from './helper/admin.seed';
     SpecialtySeederService,
     ProfessionalsSeederService,
     AdminSeederService,
+    WsGateway
   ],
 })
 export class AppModule {}

@@ -6,6 +6,7 @@ import {
   ParseUUIDPipe,
   NotFoundException,
   Post,
+  Put,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateAccountDto } from '../common/dtos/createAccount.dto';
@@ -13,6 +14,11 @@ import { CreateAccountDto } from '../common/dtos/createAccount.dto';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @Put(':id/status')
+  cambioStatus(@Param('id', ParseUUIDPipe) id: string) {
+    return this.usersService.cambioStatus(id);
+  }
 
   @Get()
   getUsers() {

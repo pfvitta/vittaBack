@@ -10,6 +10,7 @@ import { envioConfirmacion } from '../helper/serviceMail/serviceMail';
 
 @Injectable()
 export class UsersRepository {
+  
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
@@ -18,6 +19,16 @@ export class UsersRepository {
     @InjectRepository(Specialty)
     private readonly specialtyRepository: Repository<Specialty>,
   ) {}
+
+  async cambioStatus(id: string) {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new BadRequestException('Usuario no encontrado');
+    }
+    user.status === 'Active'? user.status = 'Inactive' : user.status = 'Active';
+    await this.usersRepository.save(user);
+    return 'Usuario actualizado correctamente';
+  }
 
   async getUsers(): Promise<Omit<User, 'password'>[]> {
     const users = await this.usersRepository.find({
