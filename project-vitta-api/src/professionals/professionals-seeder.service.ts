@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { User } from '../common/entities/users.entity';
 import { ProfessionalProfile } from '../common/entities/professionalProfile.entity';
 import { Specialty } from '../common/entities/specialty.entity';
+import { Files } from '../common/entities/files.entity';
 import * as bcrypt from 'bcrypt';
 import { Role } from '../common/enums/roles.enum';
 
@@ -16,6 +17,8 @@ export class ProfessionalsSeederService implements OnApplicationBootstrap {
     private readonly profRepo: Repository<ProfessionalProfile>,
     @InjectRepository(Specialty)
     private readonly specialtyRepo: Repository<Specialty>,
+    @InjectRepository(Files)
+    private readonly fileRepo: Repository<Files>,
   ) {}
 
   async onApplicationBootstrap() {
@@ -34,6 +37,12 @@ export class ProfessionalsSeederService implements OnApplicationBootstrap {
       specialties.map((s) => [s.name.toUpperCase(), s]),
     );
 
+    const imageUrls = [
+      'https://res.cloudinary.com/diqwkiyef/image/upload/v1752042836/istockphoto-1372002650-612x612_yinea1.jpg',
+      'https://res.cloudinary.com/diqwkiyef/image/upload/v1751842908/y0lkei7qme0qg2wcahgk.jpg',
+      'https://res.cloudinary.com/diqwkiyef/image/upload/v1751842867/lyadvy6qooy7ottsutza.webp',
+    ];
+
     const data = [
       {
         name: 'Alexandra Perez',
@@ -45,14 +54,15 @@ export class ProfessionalsSeederService implements OnApplicationBootstrap {
         password: 'Asdfg1234%',
         role: Role.Provider,
         biography:
-          'Especialista en nutrición vegana con enfoque integral en el bienestar físico y emocional del paciente.  Apasionada por la educación nutricional y la promoción de estilos de vida sostenibles.',
+          'Especialista en nutrición vegana con enfoque integral en el bienestar físico y emocional del paciente.',
         experience: '10 años de experiencia en nutrición clínica',
         licenseNumber: 'CM987G',
         specialties: ['Veganismo', 'Diabetes', 'Obesidad'],
+        imgUrl: imageUrls[0],
       },
       {
-        name: 'Carlos Gómez',
-        email: 'carlos@email.com',
+        name: 'Carolina Gómez',
+        email: 'carolina@email.com',
         dni: '8765432199',
         phone: '98123658948',
         city: 'Monterrey',
@@ -60,10 +70,11 @@ export class ProfessionalsSeederService implements OnApplicationBootstrap {
         password: 'Asdfg1234%',
         role: Role.Provider,
         biography:
-          'Nutriólogo especializado en el tratamiento de trastornos alimenticios, incluyendo anorexia, bulimia y trastorno por atracón.',
+          'Nutrióloga especializada en el tratamiento de trastornos alimenticios.',
         experience: '12 años trabajando con adolescentes',
         licenseNumber: 'CM123X',
         specialties: ['Trastornos alimenticios'],
+        imgUrl: imageUrls[1],
       },
       {
         name: 'Lucía Hernández',
@@ -75,16 +86,27 @@ export class ProfessionalsSeederService implements OnApplicationBootstrap {
         password: 'Asdfg1234%',
         role: Role.Provider,
         biography:
-          'Especialista en salud hormonal, con énfasis en el abordaje nutricional de trastornos tiroideos como hipotiroidismo e hipertiroidismo. Intervención metabólica para adultos con sobrepeso y obesidad.',
+          'Especialista en salud hormonal, con énfasis en trastornos tiroideos.',
         experience: '15 años en hospitales privados',
         licenseNumber: 'CM456Y',
         specialties: ['Hipo/hipertiroidismo', 'Obesidad'],
+        imgUrl: imageUrls[2],
       },
     ];
 
     for (const prof of data) {
       const hashedPassword = await bcrypt.hash(prof.password, 10);
-      let user = {
+
+      // Crear imagen
+      const file = this.fileRepo.create({
+        filename: `${prof.name.toLowerCase().replace(/ /g, '_')}.jpg`,
+        mimetype: 'image/jpeg',
+        imgUrl: prof.imgUrl,
+      });
+      const savedFile = await this.fileRepo.save(file);
+
+      // Crear usuario con imagen
+      const user = this.userRepo.create({
         name: prof.name,
         email: prof.email,
         password: hashedPassword,
@@ -94,21 +116,22 @@ export class ProfessionalsSeederService implements OnApplicationBootstrap {
         dob: new Date(prof.dob),
         role: prof.role,
         status: 'Active',
-        createdAt: new Date(),
-      };
+        createAt: new Date(),
+        file: savedFile,
+      });
       const savedUser = await this.userRepo.save(user);
 
+      // Buscar especialidades
       const specialtyIds: Specialty[] = [];
       for (const specialtyName of prof.specialties) {
-        const specialty = await this.specialtyRepo.findOne({
-          where: { name: specialtyName.toUpperCase() },
-        });
+        const specialty = specialtyMap.get(specialtyName.toUpperCase());
         if (!specialty) {
-          throw new Error('Especialidad no encontrada');
+          throw new Error(`Especialidad no encontrada: ${specialtyName}`);
         }
         specialtyIds.push(specialty);
       }
 
+      // Crear perfil profesional
       const profile = this.profRepo.create({
         biography: prof.biography,
         experience: prof.experience,
@@ -117,10 +140,9 @@ export class ProfessionalsSeederService implements OnApplicationBootstrap {
         specialty: specialtyIds,
         user: savedUser,
       });
-
       await this.profRepo.save(profile);
     }
 
-    console.log('🌱 Seed de profesionales completado.');
+    console.log('🌱 Seed de profesionales con imagen completado.');
   }
 }
