@@ -10,4 +10,3 @@ import { NutritionArticlesSeederService } from './nutrition.seed';
   exports: [NutritionService],
 })
 export class NutritionModule {}
-

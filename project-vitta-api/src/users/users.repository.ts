@@ -10,7 +10,6 @@ import { envioConfirmacion } from '../helper/serviceMail/serviceMail';
 
 @Injectable()
 export class UsersRepository {
-  
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
@@ -25,7 +24,9 @@ export class UsersRepository {
     if (!user) {
       throw new BadRequestException('Usuario no encontrado');
     }
-    user.status === 'Active'? user.status = 'Inactive' : user.status = 'Active';
+    user.status === 'Active'
+      ? (user.status = 'Inactive')
+      : (user.status = 'Active');
     await this.usersRepository.save(user);
     return 'Usuario actualizado correctamente';
   }
@@ -90,7 +91,9 @@ export class UsersRepository {
     const hashedPassword = await bcrypt.hash(users.password, 10);
 
     if (!hashedPassword) {
-      throw new BadRequestException('Error al crear usuario. Intente nuevamente.');
+      throw new BadRequestException(
+        'Error al crear usuario. Intente nuevamente.',
+      );
     }
 
     let colocarStatus = 'Inactive';
@@ -121,11 +124,15 @@ export class UsersRepository {
       });
 
       if (!userprof) {
-        throw new BadRequestException('Error al crear perfil profesional. Usuario no encontrado');
+        throw new BadRequestException(
+          'Error al crear perfil profesional. Usuario no encontrado',
+        );
       }
 
       if (!Array.isArray(users.specialty) || users.specialty.length === 0) {
-        throw new BadRequestException('Profesional debe tener al menos una especialidad');
+        throw new BadRequestException(
+          'Profesional debe tener al menos una especialidad',
+        );
       }
 
       const specialtyIds: Specialty[] = [];
@@ -134,7 +141,9 @@ export class UsersRepository {
           where: { name: specialtyName.toUpperCase() },
         });
         if (!specialty) {
-          throw new BadRequestException(`Especialidad no encontrada: ${specialtyName}`);
+          throw new BadRequestException(
+            `Especialidad no encontrada: ${specialtyName}`,
+          );
         }
         specialtyIds.push(specialty);
       }

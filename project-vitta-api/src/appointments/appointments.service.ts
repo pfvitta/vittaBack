@@ -31,20 +31,19 @@ export class AppointmentsService {
   async validateAppointment(provider: ValidateAppointmentDto) {
     const fecha = new Date(provider.date);
 
-    console.log('hora:', fecha.getHours());
-
     // 🚫 Validación: No se permiten turnos fuera del horario laboral ni fines de semana
-    const hora = fecha.getHours();
     const dia = fecha.getDay(); // Domingo: 0, Sábado: 6
 
-    if (hora > 17 || dia === 0 || dia === 6) {
+    console.log(dia);
+
+    if (dia === 0 || dia === 6) {
       throw new BadRequestException({
-        alert: 'Fuera del horario permitido para asignación de turnos',
+        alert: 'Turno fuera del horario hábil',
         errors: [
           {
             field: 'date',
             message:
-              'Solo se permiten turnos de lunes a viernes entre 08:00:00 y 17:00:00 horas.',
+              'Los turnos solo pueden agendarse de lunes a viernes, entre las 08:00 y las 17:00 horas.',
           },
         ],
         timestamp: new Date().toISOString(),
@@ -59,11 +58,6 @@ export class AppointmentsService {
     );
 
     provider.date = formatteddate;
-    /**   // 🗂️ Armar datos de la consulta
-    const datosConsulta = {
-      professionalId: provider.professionalId,
-      date: formatteddate,
-    }; */
 
     // 🔍 Buscar turnos ya tomados por el profesional en la fecha actual
     const validatedate =
@@ -95,26 +89,25 @@ export class AppointmentsService {
     const fecha = new Date(appointments.date);
     const hoy = new Date();
 
-    console.log('hora:', fecha.getHours());
-
     // 🚫 Validación: No se permiten turnos fuera del horario laboral ni fines de semana
-    const hora = fecha.getHours();
+    const hora = appointments.time;
+
     const dia = fecha.getDay(); // Domingo: 0, Sábado: 6
 
     if (
-      hora < 8 ||
-      hora > 17 ||
+      hora < '8:00' ||
+      hora > '17:00' ||
       dia === 0 ||
       dia === 6 ||
       fecha.toDateString() < hoy.toDateString()
     ) {
       throw new BadRequestException({
-        alert: 'Fuera del horario permitido para asignación de turnos',
+        alert: 'Turno fuera del horario hábil',
         errors: [
           {
             field: 'date',
             message:
-              'Solo se permiten turnos de lunes a viernes entre 08:00:00 y 17:00:00 horas.',
+              'Los turnos solo pueden agendarse de lunes a viernes, entre las 08:00 y las 17:00 horas.',
           },
         ],
         timestamp: new Date().toISOString(),
