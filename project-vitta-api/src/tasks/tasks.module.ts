@@ -6,9 +6,7 @@ import { NutritionArticles } from '../common/entities/nutritionArticle.entity';
 import { TasksController } from './task.controller';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User, NutritionArticles]),
-  ],
+  imports: [TypeOrmModule.forFeature([User, NutritionArticles])],
   providers: [TasksService],
   controllers: [TasksController],
 })

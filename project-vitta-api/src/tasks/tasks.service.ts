@@ -4,9 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../common/entities/users.entity';
 import { NutritionArticles } from '../common/entities/nutritionArticle.entity';
-import { envioConfirmacion } from '../helper/serviceMail/serviceMail'; 
+import { envioConfirmacion } from '../helper/serviceMail/serviceMail';
 import { Role } from '../common/enums/roles.enum';
-
 
 @Injectable()
 export class TasksService {
@@ -14,7 +13,8 @@ export class TasksService {
 
   constructor(
     @InjectRepository(User) private userRepo: Repository<User>,
-    @InjectRepository(NutritionArticles)private articleRepo: Repository<NutritionArticles>,
+    @InjectRepository(NutritionArticles)
+    private articleRepo: Repository<NutritionArticles>,
   ) {}
 
   // CRON: cada lunes a las 8:00 AM
@@ -23,10 +23,9 @@ export class TasksService {
     this.logger.log('🕗 Ejecutando CRON de nutrición semanal...');
 
     const article = await this.articleRepo
-        .createQueryBuilder('article')
-        .orderBy('article.createdAt', 'DESC')
-        .getOne();
-
+      .createQueryBuilder('article')
+      .orderBy('article.createdAt', 'DESC')
+      .getOne();
 
     if (!article) {
       this.logger.warn('⚠️ No se encontró ningún artículo nutricional');

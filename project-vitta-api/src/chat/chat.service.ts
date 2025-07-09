@@ -13,10 +13,13 @@ export class ChatService {
     @InjectRepository(Message)
     private readonly messageRepo: Repository<Message>,
     @InjectRepository(User)
-    private readonly userRepo: Repository<User>
+    private readonly userRepo: Repository<User>,
   ) {}
 
-  async findOrCreateConversation(userId: string, providerId: string): Promise<Conversation> {
+  async findOrCreateConversation(
+    userId: string,
+    providerId: string,
+  ): Promise<Conversation> {
     let conversation = await this.conversationRepo.findOne({
       where: {
         user: { id: userId },
@@ -27,12 +30,14 @@ export class ChatService {
 
     if (!conversation) {
       const user = await this.userRepo.findOne({ where: { id: userId } });
-      const provider = await this.userRepo.findOne({ where: { id: providerId } });
+      const provider = await this.userRepo.findOne({
+        where: { id: providerId },
+      });
 
       conversation = this.conversationRepo.create({
         user: user!,
         provider: provider!,
-        });
+      });
 
       await this.conversationRepo.save(conversation);
     }
@@ -45,15 +50,16 @@ export class ChatService {
     senderId: string,
     content: string,
   ): Promise<Message> {
-    const conversation = await this.conversationRepo.findOne({ where: { id: conversationId } });
+    const conversation = await this.conversationRepo.findOne({
+      where: { id: conversationId },
+    });
     const sender = await this.userRepo.findOne({ where: { id: senderId } });
 
     const message = this.messageRepo.create({
-        conversation: conversation!,
-        sender: sender!,
-        content,
-        });
-
+      conversation: conversation!,
+      sender: sender!,
+      content,
+    });
 
     return this.messageRepo.save(message);
   }

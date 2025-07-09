@@ -92,7 +92,6 @@ import { ChatModule } from './chat/chat.module';
     ScheduleModule.forRoot(),
     TasksModule,
     ChatModule,
-    
   ],
   controllers: [AppController],
   providers: [
@@ -100,7 +99,7 @@ import { ChatModule } from './chat/chat.module';
     SpecialtySeederService,
     ProfessionalsSeederService,
     AdminSeederService,
-    WsGateway
+    WsGateway,
   ],
 })
 export class AppModule {}
