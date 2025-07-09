@@ -61,6 +61,7 @@ export class AppointmentsController {
   })
   @ApiBody({ type: CreateAppointmentDto })
   async createAppointment(@Body() appointments: CreateAppointmentDto) {
+    console.log (appointments);
     return await this.appointmentsService.createAppointment(appointments);
   }
 }
