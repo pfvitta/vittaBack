@@ -67,7 +67,11 @@ export class User {
   @Column({ type: 'enum', enum: Role, nullable: false })
   role: Role;
 
-  @OneToOne(() => Membership, (membership) => membership.user)
+  @OneToOne(() => Membership, (membership) => membership.user, {
+    cascade: true,
+    eager: true,
+  })
+  @JoinColumn()
   membership: Membership;
 
   @OneToOne(

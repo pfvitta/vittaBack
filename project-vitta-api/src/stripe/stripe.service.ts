@@ -229,8 +229,12 @@ export class StripeService {
     const oneMonthLater = new Date(today);
     oneMonthLater.setMonth(today.getMonth() + 1);
 
-    const membership =
-      user.membership ?? this.membershipRepository.create({ user });
+    let membership = user.membership;
+
+    if (!membership) {
+      membership = this.membershipRepository.create({ user });
+      user.membership = membership; // ✅ actualizar relación
+    }
 
     membership.status = 'Active';
     membership.startDate = today;
@@ -239,6 +243,7 @@ export class StripeService {
     membership.type = 'mensual';
 
     await this.membershipRepository.save(membership);
+    await this.userRepository.save(user); // ✅ asegura que user.membership se actualiza
 
     try {
       await envioConfirmacion('paymentSuccess', user.email);

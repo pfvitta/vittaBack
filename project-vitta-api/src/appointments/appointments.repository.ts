@@ -12,6 +12,18 @@ export class AppointmentsRepository {
     private appointmentRepository: Repository<Appointment>,
   ) {}
 
+  async userShiftHistory(id: string) {
+    return this.appointmentRepository.find({
+      where: { id },
+    });
+  }
+
+  async providerShiftHistory(id: string) {
+    return this.appointmentRepository.find({
+      where: { id },
+    });
+  }
+
   /**
    * Verifica si un profesional tiene un turno agendado en una fecha específica.
    * @param provider - Objeto con el ID del profesional y la fecha a consultar.
