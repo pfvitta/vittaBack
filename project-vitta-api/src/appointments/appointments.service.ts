@@ -17,23 +17,42 @@ export class AppointmentsService {
     private readonly appointmentsRepository: AppointmentsRepository,
   ) {}
 
+  /**
+   * Consulta el historial de turnos agendados por un usuario.
+   *
+   * @param id - ID del usuario (UUID).
+   * @throws NotFoundException si no tiene turnos registrados.
+   * @returns Lista de turnos asociados al usuario.
+   */
   async userShiftHistory(id: string) {
     const shiftValidation =
       await this.appointmentsRepository.userShiftHistory(id);
 
-    if (!shiftValidation) {
-      throw new NotFoundException('No cuenta con turnos asiganados');
+    if (!shiftValidation || shiftValidation.length === 0) {
+      throw new NotFoundException(
+        'No se encontraron turnos para este usuario.',
+      );
     }
 
     return shiftValidation;
   }
 
+  /**
+   * Consulta el historial de turnos asignados a un profesional.
+   *
+   * @param id - ID del profesional (UUID).
+   * @throws NotFoundException si no tiene turnos registrados.
+   * @returns Lista de turnos asignados al profesional.
+   */
+
   async providerShiftHistory(id: string) {
     const shiftValidation =
       await this.appointmentsRepository.providerShiftHistory(id);
 
-    if (!shiftValidation) {
-      throw new NotFoundException('No cuenta con turnos asiganados');
+    if (!shiftValidation || shiftValidation.length === 0) {
+      throw new NotFoundException(
+        'No se encontraron turnos asignados a este profesional.',
+      );
     }
 
     return shiftValidation;
@@ -101,27 +120,65 @@ export class AppointmentsService {
 
   /**
    * Crea un nuevo turno para un usuario con un profesional en una franja horaria.
-   * Valida previamente si ese turno ya está ocupado.
    *
-   * @param appointments - Datos del turno a crear.
-   * @throws NotFoundException si ya hay un turno con la misma fecha, hora y participantes.
+   * Reglas de negocio:
+   * - No se permite que el usuario sea el mismo profesional.
+   * - Solo se permiten turnos de lunes a viernes, entre 08:00 y 17:00.
+   * - La hora debe ser una franja horaria permitida (`this.horus`).
+   * - No se permite agendar fechas pasadas.
+   * - No se permite duplicidad (mismo usuario, profesional, fecha y hora).
+   *
+   * @param appointments - DTO con los datos del turno.
+   * @throws BadRequestException | NotFoundException
    * @returns Turno creado exitosamente.
    */
   async createAppointment(appointments: CreateAppointmentDto) {
+    // 🚫 Regla 1: Usuario no puede agendar consigo mismo
+    if (appointments.userId === appointments.professionalId) {
+      throw new BadRequestException({
+        alert: 'Asignación inválida',
+        errors: [
+          {
+            field: 'userId',
+            message: 'El usuario no puede agendar un turno consigo mismo.',
+          },
+        ],
+        timestamp: new Date().toISOString(),
+      });
+    }
+
+    // 📅 Procesar fechas
     const fecha = new Date(appointments.date);
     const hoy = new Date();
 
-    // 🚫 Validación: No se permiten turnos fuera del horario laboral ni fines de semana
-    const hora = appointments.time;
+    const fechaSinHora = new Date(
+      fecha.getFullYear(),
+      fecha.getMonth(),
+      fecha.getDate(),
+    );
+    const hoySinHora = new Date(
+      hoy.getFullYear(),
+      hoy.getMonth(),
+      hoy.getDate(),
+    );
+
+    // 🚫 Regla 2: No se permiten fines de semana ni fuera del horario laboral
 
     const dia = fecha.getDay(); // Domingo: 0, Sábado: 6
 
+    const hora = appointments.time.trim(); // limpia espacios
+    const [hh, mm] = hora.split(':').map(Number);
+    const minutos = hh * 60 + mm;
+
+    const HORA_INICIO = 480; // 08:00
+    const HORA_FIN = 1020; // 17:00
+
     if (
-      hora < '8:00' ||
-      hora > '17:00' ||
+      minutos < HORA_INICIO ||
+      minutos > HORA_FIN ||
       dia === 0 ||
       dia === 6 ||
-      fecha.toDateString() < hoy.toDateString()
+      fechaSinHora < hoySinHora
     ) {
       throw new BadRequestException({
         alert: 'Turno fuera del horario hábil',
@@ -132,11 +189,10 @@ export class AppointmentsService {
               'Los turnos solo pueden agendarse de lunes a viernes, entre las 08:00 y las 17:00 horas.',
           },
         ],
-        timestamp: new Date().toISOString(),
       });
     }
 
-    // 🕒 Validar que la hora enviada coincida con una franja horaria permitida
+    // 🚫 Regla 3: Validar franja horaria permitida
     const isHoraValida = this.horus.some(
       (h) => h.hourHand === appointments.time,
     );
@@ -147,20 +203,12 @@ export class AppointmentsService {
         errors: [
           { field: 'time', message: 'La hora no es una franja permitida' },
         ],
-        timestamp: new Date().toISOString(),
       });
     }
 
-    // 🧼 Formatear la fecha (sin hora)
-    const formatteddate = new Date(
-      fecha.getFullYear(),
-      fecha.getMonth(),
-      fecha.getDate(),
-    ); // sin hora, en local
+    appointments.date = fechaSinHora;
 
-    appointments.date = formatteddate;
-
-    // 🔍 Validar si ya existe el turno
+    // 🚫 Regla 4: Verificar duplicidad del turno
     const validateHorus =
       await this.appointmentsRepository.validateAppointments(appointments);
     if (validateHorus) {
