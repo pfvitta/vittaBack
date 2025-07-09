@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { NutritionArticles } from '../common/entities/nutritionArticle.entity';
 
-
 @Injectable()
 export class NutritionArticlesSeederService implements OnApplicationBootstrap {
   constructor(
@@ -74,7 +73,9 @@ export class NutritionArticlesSeederService implements OnApplicationBootstrap {
     ];
 
     for (const article of articlesData) {
-      const exists = await this.articleRepo.findOne({ where: { title: article.title } });
+      const exists = await this.articleRepo.findOne({
+        where: { title: article.title },
+      });
       if (!exists) {
         const newArticle = this.articleRepo.create(article);
         await this.articleRepo.save(newArticle);

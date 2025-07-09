@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Appointment } from '../common/entities/appointment.entity';
 import { Repository } from 'typeorm';
 import { CreateAppointmentDto } from '../common/dtos/createAppointment.dto';
+import { ValidateAppointmentDto } from '../common/dtos/validateAppointment.dto';
 
 @Injectable()
 export class AppointmentsRepository {
@@ -16,10 +17,7 @@ export class AppointmentsRepository {
    * @param provider - Objeto con el ID del profesional y la fecha a consultar.
    * @returns Lista de turnos encontrados para ese profesional en esa fecha.
    */
-  async validateAppointmentProfessional(provider: {
-    professionalId: string;
-    date: Date;
-  }) {
+  async validateAppointmentProfessional(provider: ValidateAppointmentDto) {
     return await this.appointmentRepository.find({
       where: { professionalId: provider.professionalId, date: provider.date },
     });

@@ -6,7 +6,7 @@ import { textMails } from './textMails';
 export const envioConfirmacion = async (
   tipoEmail: string,
   email: string,
-  args?: { title?: string; content?: string; name?: string }
+  args?: { title?: string; content?: string; name?: string },
 ) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',

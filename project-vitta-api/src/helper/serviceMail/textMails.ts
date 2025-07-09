@@ -1,8 +1,8 @@
 export const textMails = async (
-          tipoEmail: string, 
-          email: string,
-          args?: { title?: string; content?: string; name?: string }
-        ) => {
+  tipoEmail: string,
+  email: string,
+  args?: { title?: string; content?: string; name?: string },
+) => {
   let mailOptions: any = {};
 
   switch (tipoEmail) {
@@ -94,7 +94,7 @@ export const textMails = async (
       };
       break;
 
-      case 'nutrition':
+    case 'nutrition':
       mailOptions = {
         from: '"Vitta Nutrición Semanal" <pfvitta@gmail.com>',
         to: email,
@@ -109,7 +109,6 @@ export const textMails = async (
         `,
       };
       break;
-
 
     default:
       throw new Error(`Tipo de email no soportado: ${tipoEmail}`);

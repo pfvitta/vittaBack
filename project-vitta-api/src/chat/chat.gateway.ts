@@ -13,8 +13,8 @@ import { ChatService } from './chat.service';
 
 @WebSocketGateway({ cors: { origin: '*' } })
 export class ChatGateway
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-  
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
   @WebSocketServer()
   server: Server;
 
@@ -35,7 +35,12 @@ export class ChatGateway
   // Evento para enviar mensaje
   @SubscribeMessage('sendMessage')
   async handleMessage(
-    @MessageBody() data: { conversationId: string; senderId: string; content: string },
+    @MessageBody()
+    data: {
+      conversationId: string;
+      senderId: string;
+      content: string;
+    },
   ) {
     const message = await this.chatService.sendMessage(
       data.conversationId,
