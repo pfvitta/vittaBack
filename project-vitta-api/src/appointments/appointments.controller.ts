@@ -1,4 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBody, ApiResponse } from '@nestjs/swagger';
 import { AppointmentsService } from './appointments.service';
 import { ValidateAppointmentDto } from '../common/dtos/validateAppointment.dto';
@@ -10,6 +17,16 @@ import { Appointment } from '../common/entities/appointment.entity';
 @Controller('appointments')
 export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
+
+  @Get('user')
+  async userShiftHistory(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.appointmentsService.userShiftHistory(id);
+  }
+
+  @Get('provider')
+  async providerShiftHistory(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.appointmentsService.providerShiftHistory(id);
+  }
 
   /**
    * Devuelve los turnos disponibles de un profesional para la fecha actual.

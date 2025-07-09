@@ -17,6 +17,28 @@ export class AppointmentsService {
     private readonly appointmentsRepository: AppointmentsRepository,
   ) {}
 
+  async userShiftHistory(id: string) {
+    const shiftValidation =
+      await this.appointmentsRepository.userShiftHistory(id);
+
+    if (!shiftValidation) {
+      throw new NotFoundException('No cuenta con turnos asiganados');
+    }
+
+    return shiftValidation;
+  }
+
+  async providerShiftHistory(id: string) {
+    const shiftValidation =
+      await this.appointmentsRepository.providerShiftHistory(id);
+
+    if (!shiftValidation) {
+      throw new NotFoundException('No cuenta con turnos asiganados');
+    }
+
+    return shiftValidation;
+  }
+
   /**
    * Valida los horarios disponibles de un profesional para la fecha actual (hoy).
    * Se ejecuta al oprimir el botón "Agendar turno" y devuelve los horarios aún libres.
