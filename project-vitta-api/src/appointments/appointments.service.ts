@@ -215,6 +215,57 @@ export class AppointmentsService {
       throw new NotFoundException('No hay disponibilidad para esa franja');
     }
 
+    const inicioMes = new Date(
+      fecha.getFullYear(),
+      fecha.getMonth(),
+      1,
+      0,
+      0,
+      0,
+    );
+
+    const inicioMesSinHora = new Date(
+      inicioMes.getFullYear(),
+      inicioMes.getMonth(),
+      inicioMes.getDate(),
+    );
+
+    const finMes = new Date(
+      fecha.getFullYear(),
+      fecha.getMonth() + 1,
+      0,
+      23,
+      59,
+      59,
+    );
+
+    const finMesSinHora = new Date(
+      finMes.getFullYear(),
+      finMes.getMonth(),
+      finMes.getDate(),
+    );
+
+    const createdatosvalidacionturno = {
+      userId: appointments.userId,
+      inicio: inicioMesSinHora,
+      fin: finMesSinHora,
+    };
+
+    const cantidadTurnosMes =
+      await this.appointmentsRepository.validateUserShiftAssignment(
+        createdatosvalidacionturno,
+      );
+
+    const turnosValidos = cantidadTurnosMes.filter((turno) =>
+      ['pending', 'confirmed', 'completed'].includes(turno.status),
+    );
+
+    if (turnosValidos.length >= 2) {
+      throw new NotFoundException(
+        'Ya completó la totalidad de sus turnos para este mes',
+      );
+    }
+
     // ✅ Crear turno
     return await this.appointmentsRepository.createAppointment(appointments);
   }
