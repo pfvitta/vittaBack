@@ -75,8 +75,6 @@ export class AppointmentsService {
     // 🚫 Validación: No se permiten turnos fuera del horario laboral ni fines de semana
     const dia = fecha.getDay(); // Domingo: 0, Sábado: 6
 
-    console.log(dia);
-
     if (dia === 0 || dia === 6) {
       throw new BadRequestException({
         alert: 'Turno fuera del horario hábil',
@@ -87,7 +85,6 @@ export class AppointmentsService {
               'Los turnos solo pueden agendarse de lunes a viernes, entre las 08:00 y las 17:00 horas.',
           },
         ],
-        timestamp: new Date().toISOString(),
       });
     }
 

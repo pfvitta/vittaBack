@@ -1,10 +1,14 @@
 import { v2 } from 'cloudinary';
 import { config as dotenvConfig } from 'dotenv';
 
-// Cargar variables de entorno desde el archivo .env
+// Carga las variables de entorno desde el archivo correspondiente (.env.development, etc.)
 dotenvConfig({ path: '.env.development' });
 //dotenvConfig();
 
+/**
+ * Proveedor de configuración para Cloudinary.
+ * Se inyecta como 'CLOUDINARY' usando inyección de dependencias de NestJS.
+ */
 export const CloudinaryConfig = {
   provide: 'CLOUDINARY',
   useFactory: () => {
