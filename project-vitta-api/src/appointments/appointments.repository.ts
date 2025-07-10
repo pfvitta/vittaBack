@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Appointment } from '../common/entities/appointment.entity';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { CreateAppointmentDto } from '../common/dtos/createAppointment.dto';
 import { ValidateAppointmentDto } from '../common/dtos/validateAppointment.dto';
 
@@ -32,6 +32,16 @@ export class AppointmentsRepository {
   async validateAppointmentProfessional(provider: ValidateAppointmentDto) {
     return await this.appointmentRepository.find({
       where: { professionalId: provider.professionalId, date: provider.date },
+    });
+  }
+
+  async validateUserShiftAssignment(rango: {
+    userId: string;
+    inicio: Date;
+    fin: Date;
+  }) {
+    return await this.appointmentRepository.find({
+      where: { userId: rango.userId, date: Between(rango.inicio, rango.fin) },
     });
   }
 
