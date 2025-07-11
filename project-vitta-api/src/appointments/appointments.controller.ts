@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
 } from '@nestjs/common';
 import {
@@ -122,5 +123,10 @@ export class AppointmentsController {
   async createAppointment(@Body() appointments: CreateAppointmentDto) {
     console.log('[BACKEND] Payload recibido:', appointments);
     return this.appointmentsService.createAppointment(appointments);
+  }
+
+  @Patch('cancel/:id')
+  async cancelAppointment(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.appointmentsService.cancelAppointment(id);
   }
 }

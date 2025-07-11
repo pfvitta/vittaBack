@@ -100,4 +100,12 @@ export class AppointmentsService {
 
     return this.horus.filter((hora) => !horasOcupadas.includes(hora.hourHand));
   }
+
+  async cancelAppointment(id: string) {
+    const appt = await this.appointmentsRepository.validate(id);
+    if (!appt) throw new NotFoundException('Turno no encontrado');
+
+    appt.status = 'cancelled';
+    return await this.appointmentsRepository.updateStatus(appt);
+  }
 }
