@@ -41,6 +41,9 @@ export class ProfessionalsSeederService implements OnApplicationBootstrap {
       'https://res.cloudinary.com/diqwkiyef/image/upload/v1752042836/istockphoto-1372002650-612x612_yinea1.jpg',
       'https://res.cloudinary.com/diqwkiyef/image/upload/v1751842908/y0lkei7qme0qg2wcahgk.jpg',
       'https://res.cloudinary.com/diqwkiyef/image/upload/v1751842867/lyadvy6qooy7ottsutza.webp',
+      'https://res.cloudinary.com/diqwkiyef/image/upload/v1752040022/m324gfaugizrzydmoen0.jpg',
+      'https://res.cloudinary.com/diqwkiyef/image/upload/v1752217654/imagen_muj_tfwila.jpg',
+      'https://res.cloudinary.com/diqwkiyef/image/upload/v1752217837/imagen_muj_tcvcfl.jpg',
     ];
 
     const data = [
@@ -92,8 +95,55 @@ export class ProfessionalsSeederService implements OnApplicationBootstrap {
         specialties: ['Hipo/hipertiroidismo', 'Obesidad'],
         imgUrl: imageUrls[2],
       },
+      {
+        name: 'Julio Ortega',
+        email: 'julio@email.com',
+        dni: '9876543211',
+        phone: '98123658950',
+        city: 'Ciudad de México',
+        dob: '1980-10-20',
+        password: 'Asdfg1234%',
+        role: Role.Provider,
+        biography:
+          'Nutriólogo integral con experiencia en múltiples áreas de la salud y nutrición.',
+        experience: '20 años en clínicas y docencia universitaria',
+        licenseNumber: 'CM999Z',
+        specialties: ['Veganismo', 'Trastornos alimenticios'],
+        imgUrl: imageUrls[3],
+      },
+      {
+        name: 'María Fernanda Ruiz',
+        email: 'mariaf@email.com',
+        dni: '1029384756',
+        phone: '98123658951',
+        city: 'Tijuana',
+        dob: '1992-05-30',
+        password: 'Asdfg1234%',
+        role: Role.Provider,
+        biography:
+          'Enfocada en la nutrición infantil y prevención de enfermedades metabólicas desde la niñez.',
+        experience: '8 años trabajando con familias y escuelas',
+        licenseNumber: 'CM321K',
+        specialties: ['Obesidad', 'Diabetes'],
+        imgUrl: imageUrls[4],
+      },
+      {
+        name: 'Esteban Márquez',
+        email: 'esteban@email.com',
+        dni: '5647382910',
+        phone: '98123658952',
+        city: 'Mérida',
+        dob: '1975-12-12',
+        password: 'Asdfg1234%',
+        role: Role.Provider,
+        biography:
+          'Especialista en nutrición deportiva y control de peso en adultos mayores.',
+        experience: '18 años de experiencia clínica y deportiva',
+        licenseNumber: 'CM777M',
+        specialties: ['Obesidad', 'Diabetes', 'Hipo/hipertiroidismo'],
+        imgUrl: imageUrls[5],
+      },
     ];
-
     for (const prof of data) {
       const hashedPassword = await bcrypt.hash(prof.password, 10);
 
