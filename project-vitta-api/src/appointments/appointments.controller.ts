@@ -133,7 +133,5 @@ export class AppointmentsController {
   @Patch('provider/confirm/:id')
   async confirmAppointment(@Param('id', ParseUUIDPipe) id: string) {
     return await this.appointmentsService.confirmAppointment(id);
-    console.log(appointments);
-    return await this.appointmentsService.createAppointment(appointments);
   }
 }
