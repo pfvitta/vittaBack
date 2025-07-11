@@ -12,15 +12,17 @@ export class AppointmentsRepository {
     private appointmentRepository: Repository<Appointment>,
   ) {}
 
-  async userShiftHistory(id: string) {
+  async userShiftHistory(userId: string) {
     return this.appointmentRepository.find({
-      where: { id },
+      where: { userId },
+      relations: ['professional', 'professional.user'],
     });
   }
 
-  async providerShiftHistory(id: string) {
+  async providerShiftHistory(professionalId: string) {
     return this.appointmentRepository.find({
-      where: { id },
+      where: { professionalId: professionalId },
+      relations: ['user'],
     });
   }
 
@@ -54,5 +56,15 @@ export class AppointmentsRepository {
 
   async createAppointment(appointments: CreateAppointmentDto) {
     return await this.appointmentRepository.save(appointments);
+  }
+
+  async validate(id: string) {
+    return await this.appointmentRepository.findOne({ where: { id } });
+  }
+
+  async updateStatus(appt: Appointment) {
+    return await this.appointmentRepository.update(appt.id, {
+      status: appt.status,
+    });
   }
 }

@@ -35,6 +35,8 @@ export class UsersController {
     return this.usersService.getUsers();
   }
 
+
+  // 🟢 RUTA DE EMAIL ANTES DE LA DE ID
   @Get(':id')
   @ApiOperation({
     summary: 'Obtener usuario por ID',
@@ -80,5 +82,16 @@ export class UsersController {
       throw new NotFoundException('Usuario no encontrado');
     }
     return user;
+  }
+
+  @Post('register')
+  createUser(@Body() user: CreateAccountDto) {
+    return this.usersService.createUser(user);
+  }
+
+  // 🛑 ESTA RUTA DEBE IR AL FINAL
+  @Get(':id')
+  getUsersById(@Param('id', ParseUUIDPipe) id: string) {
+    return this.usersService.getUsersById(id);
   }
 }
