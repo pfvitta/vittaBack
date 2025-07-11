@@ -2,9 +2,13 @@ import { registerAs } from '@nestjs/config';
 import { config as dotenvConfig } from 'dotenv';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
+// 📦 Cargar variables de entorno desde el archivo correspondiente
 dotenvConfig({ path: '.env.development' });
 //dotenvConfig();
 
+/**
+ * Configuración central de TypeORM para NestJS
+ */
 const config = {
   type: 'postgres',
   database: process.env.DB_NAME,

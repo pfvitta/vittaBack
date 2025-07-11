@@ -64,7 +64,9 @@ export class AppointmentsService {
 
   async validateAppointment(provider: ValidateAppointmentDto) {
     const fecha = new Date(provider.date);
-    const dia = fecha.getDay();
+
+    // 🚫 Validación: No se permiten turnos fuera del horario laboral ni fines de semana
+    const dia = fecha.getDay(); // Domingo: 0, Sábado: 6
 
     if (dia === 0 || dia === 6) {
       throw new BadRequestException({
@@ -113,7 +115,67 @@ export class AppointmentsService {
     const appt = await this.appointmentsRepository.validate(id);
     if (!appt) throw new NotFoundException('Turno no encontrado');
 
-    appt.status = 'confirmed';
+    // 🚫 Regla 4: Verificar duplicidad del turno
+    const validateHorus =
+      await this.appointmentsRepository.validateAppointments(appointments);
+    if (validateHorus) {
+      throw new NotFoundException('No hay disponibilidad para esa franja');
+    }
+
+    const inicioMes = new Date(
+      fecha.getFullYear(),
+      fecha.getMonth(),
+      1,
+      0,
+      0,
+      0,
+    );
+
+    const inicioMesSinHora = new Date(
+      inicioMes.getFullYear(),
+      inicioMes.getMonth(),
+      inicioMes.getDate(),
+    );
+
+    const finMes = new Date(
+      fecha.getFullYear(),
+      fecha.getMonth() + 1,
+      0,
+      23,
+      59,
+      59,
+    );
+
+    const finMesSinHora = new Date(
+      finMes.getFullYear(),
+      finMes.getMonth(),
+      finMes.getDate(),
+    );
+
+    const createdatosvalidacionturno = {
+      userId: appointments.userId,
+      inicio: inicioMesSinHora,
+      fin: finMesSinHora,
+    };
+
+    const cantidadTurnosMes =
+      await this.appointmentsRepository.validateUserShiftAssignment(
+        createdatosvalidacionturno,
+      );
+
+    const turnosValidos = cantidadTurnosMes.filter((turno) =>
+      ['pending', 'confirmed', 'completed'].includes(turno.status),
+    );
+
+    if (turnosValidos.length >= 2) {
+      throw new NotFoundException(
+        'Ya completó la totalidad de sus turnos para este mes',
+      );
+    }
+
+    // ✅ Crear turno
+    return await this.appointmentsRepository.createAppointment(appointments);
+     appt.status = 'confirmed';
     return await this.appointmentsRepository.updateStatus(appt);
   }
 }
