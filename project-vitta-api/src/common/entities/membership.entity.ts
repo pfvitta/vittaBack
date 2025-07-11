@@ -19,7 +19,6 @@ export class Membership {
   id: string;
 
   @OneToOne(() => User, (user) => user.membership)
-  @JoinColumn()
   user: User;
 
   // Tipo de membresía (ej: 'mensual', 'premium')

@@ -38,6 +38,7 @@ export class UsersRepository {
         'professionalProfile.specialty',
         'membership',
         'file',
+        'appointments',
       ],
     });
 
@@ -57,6 +58,7 @@ export class UsersRepository {
         'professionalProfile.specialty',
         'membership',
         'file',
+        'appointments',
       ],
     });
 

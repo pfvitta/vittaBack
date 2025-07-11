@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Appointment } from '../common/entities/appointment.entity';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { CreateAppointmentDto } from '../common/dtos/createAppointment.dto';
 import { ValidateAppointmentDto } from '../common/dtos/validateAppointment.dto';
 
@@ -12,22 +12,36 @@ export class AppointmentsRepository {
     private appointmentRepository: Repository<Appointment>,
   ) {}
 
-  /**
-   * Verifica si un profesional tiene un turno agendado en una fecha específica.
-   * @param provider - Objeto con el ID del profesional y la fecha a consultar.
-   * @returns Lista de turnos encontrados para ese profesional en esa fecha.
-   */
+  async userShiftHistory(userId: string) {
+    return this.appointmentRepository.find({
+      where: { userId },
+      relations: ['professional', 'professional.user'],
+    });
+  }
+
+  async providerShiftHistory(professionalId: string) {
+    return this.appointmentRepository.find({
+      where: { professionalId: professionalId },
+      relations: ['user'],
+    });
+  }
+
   async validateAppointmentProfessional(provider: ValidateAppointmentDto) {
     return await this.appointmentRepository.find({
       where: { professionalId: provider.professionalId, date: provider.date },
     });
   }
 
-  /**
-   * Valida si un turno específico ya existe con base en todos sus datos.
-   * @param appointments - DTO con los datos completos del turno a validar.
-   * @returns El turno encontrado, si existe.
-   */
+  async validateUserShiftAssignment(rango: {
+    userId: string;
+    inicio: Date;
+    fin: Date;
+  }) {
+    return await this.appointmentRepository.find({
+      where: { userId: rango.userId, date: Between(rango.inicio, rango.fin) },
+    });
+  }
+
   async validateAppointments(appointments: CreateAppointmentDto) {
     return await this.appointmentRepository.findOne({
       where: {
@@ -40,12 +54,17 @@ export class AppointmentsRepository {
     });
   }
 
-  /**
-   * Crea un nuevo turno con los datos proporcionados.
-   * @param appointments - DTO con los datos necesarios para crear el turno.
-   * @returns El turno creado.
-   */
   async createAppointment(appointments: CreateAppointmentDto) {
     return await this.appointmentRepository.save(appointments);
+  }
+
+  async validate(id: string) {
+    return await this.appointmentRepository.findOne({ where: { id } });
+  }
+
+  async updateStatus(appt: Appointment) {
+    return await this.appointmentRepository.update(appt.id, {
+      status: appt.status,
+    });
   }
 }

@@ -41,8 +41,8 @@ export class CreateAppointmentDto {
     description: 'Hora del turno en formato HH:mm (24h)',
   })
   @IsNotEmpty({ message: 'La hora del turno es obligatoria' })
-  @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, {
-    message: 'La hora debe estar en formato HH:mm (24 horas)',
+  @Matches(/^(08|09|1[0-7]):00$/, {
+    message: 'La hora debe ser una franja exacta entre 08:00 y 17:00',
   })
   time: string;
 

@@ -25,17 +25,7 @@ export class UsersController {
     return this.usersService.getUsers();
   }
 
-  @Get(':id')
-  getUsersById(@Param('id', ParseUUIDPipe) id: string) {
-    return this.usersService.getUsersById(id);
-  }
-
-  @Post('register')
-  createUser(@Body() user: CreateAccountDto) {
-    return this.usersService.createUser(user);
-  }
-
-  // GET /users/exists/:email
+  // 🟢 RUTA DE EMAIL ANTES DE LA DE ID
   @Get('exists/:email')
   async userExists(@Param('email') email: string) {
     const exists = await this.usersService.getUserByEmail(email);
@@ -52,5 +42,16 @@ export class UsersController {
       throw new NotFoundException('Usuario no encontrado');
     }
     return user;
+  }
+
+  @Post('register')
+  createUser(@Body() user: CreateAccountDto) {
+    return this.usersService.createUser(user);
+  }
+
+  // 🛑 ESTA RUTA DEBE IR AL FINAL
+  @Get(':id')
+  getUsersById(@Param('id', ParseUUIDPipe) id: string) {
+    return this.usersService.getUsersById(id);
   }
 }
