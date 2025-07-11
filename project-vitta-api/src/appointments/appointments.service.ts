@@ -108,4 +108,12 @@ export class AppointmentsService {
     appt.status = 'cancelled';
     return await this.appointmentsRepository.updateStatus(appt);
   }
+
+  async confirmAppointment(id: string) {
+    const appt = await this.appointmentsRepository.validate(id);
+    if (!appt) throw new NotFoundException('Turno no encontrado');
+
+    appt.status = 'confirmed';
+    return await this.appointmentsRepository.updateStatus(appt);
+  }
 }
