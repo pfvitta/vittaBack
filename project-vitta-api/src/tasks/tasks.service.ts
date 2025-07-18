@@ -18,7 +18,7 @@ export class TasksService {
   ) {}
 
   // CRON: cada lunes a las 8:00 AM
-  @Cron('*/2 * * * *')
+  @Cron('0 8 1 * *')
   async sendNutritionEmails() {
     this.logger.log('🕗 Ejecutando CRON de nutrición semanal...');
 
