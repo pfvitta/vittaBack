@@ -45,8 +45,12 @@ export class UsersController {
   }
 
   @Post('register')
-  createUser(@Body() user: CreateAccountDto) {
-    return this.usersService.createUser(user);
+  async createUser(@Body() user: CreateAccountDto) {
+      const newUser = await this.usersService.createUser(user);
+  return {
+    message: 'Usuario creado exitosamente',
+    user: newUser,
+  };
   }
 
   // 🛑 ESTA RUTA DEBE IR AL FINAL

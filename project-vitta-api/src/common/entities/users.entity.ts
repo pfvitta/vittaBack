@@ -44,7 +44,7 @@ export class User {
   phone: string;
 
   // Número de documento único
-  @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+  @Column({ type: 'varchar', length: 10, nullable: false }) // 'unique: true' se saca esta propiedad por motivos de que al crear un usuario con rol 'user' se envia el mismo DNI
   dni: string;
 
   // Ciudad de residencia

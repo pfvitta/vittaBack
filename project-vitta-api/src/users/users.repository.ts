@@ -85,10 +85,12 @@ export class UsersRepository {
     });
     if (existeEmail) return;
 
-    const existeDni = await this.usersRepository.findOne({
+    // se comenta por motivos de que al crear un usuario con rol 'user' se envia el mismo DNI
+
+/**    const existeDni = await this.usersRepository.findOne({
       where: { dni: users.dni },
     });
-    if (existeDni) return;
+    if (existeDni) return; */
 
     const hashedPassword = await bcrypt.hash(users.password, 10);
 
