@@ -38,7 +38,11 @@ export class AppointmentsRepository {
     fin: Date;
   }) {
     return await this.appointmentRepository.find({
-      where: { userId: rango.userId, date: Between(rango.inicio, rango.fin) },
+      where: {
+        userId: rango.userId,
+        date: Between(rango.inicio, rango.fin),
+        status: 'confirmed',
+      },
     });
   }
 
