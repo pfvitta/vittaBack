@@ -19,12 +19,12 @@ export class SpecialtySeederService implements OnApplicationBootstrap {
     }
 
     const specialties = this.specialtyRepo.create([
-      { name: 'VEGANISMO' },
-      { name: 'DIABETES' },
-      { name: 'OBESIDAD' },
-      { name: 'CELIAQUÍA' },
-      { name: 'HIPO/HIPERTIROIDISMO' },
-      { name: 'TRASTORNOS ALIMENTICIOS' },
+      { name: 'Veganismo' },
+      { name: 'Diabetes' },
+      { name: 'Obesidad' },
+      { name: 'Celiaquía' },
+      { name: 'Hipo/Hipertiroidismo' },
+      { name: 'Trastornos Alimenticios' },
     ]);
 
     await this.specialtyRepo.save(specialties);
