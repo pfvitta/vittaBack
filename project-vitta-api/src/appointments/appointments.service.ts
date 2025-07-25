@@ -85,7 +85,7 @@ export class AppointmentsService {
       fecha.getDate(),
     );
 
-    provider.date = formatteddate;
+    provider.date = formatteddate.toISOString();
 
     const validatedate =
       await this.appointmentsRepository.validateAppointmentProfessional(

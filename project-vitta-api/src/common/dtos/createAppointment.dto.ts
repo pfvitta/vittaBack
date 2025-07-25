@@ -34,7 +34,7 @@ export class CreateAppointmentDto {
   })
   @IsNotEmpty({ message: 'La fecha del turno es obligatoria' })
   @IsDateString({}, { message: 'Debe ser una fecha válida (YYYY-MM-DD)' })
-  date: Date;
+  date: string;
 
   @ApiProperty({
     example: '14:00:00',

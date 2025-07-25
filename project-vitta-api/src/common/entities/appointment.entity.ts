@@ -38,7 +38,7 @@ export class Appointment {
 
   // Fecha agendada del turno
   @Column({ type: 'date', nullable: false })
-  date: Date;
+  date: string;
 
   // Hora del turno (HH:mm)
   @Column({ type: 'time', nullable: false })
