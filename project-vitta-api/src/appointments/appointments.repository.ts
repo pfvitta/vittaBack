@@ -4,6 +4,7 @@ import { Appointment } from '../common/entities/appointment.entity';
 import { Between, Repository } from 'typeorm';
 import { CreateAppointmentDto } from '../common/dtos/createAppointment.dto';
 import { ValidateAppointmentDto } from '../common/dtos/validateAppointment.dto';
+import { format } from 'date-fns';
 
 @Injectable()
 export class AppointmentsRepository {
@@ -37,10 +38,13 @@ export class AppointmentsRepository {
     inicio: Date;
     fin: Date;
   }) {
+    const inicioStr = format(rango.inicio, 'yyyy-MM-dd');
+    const finStr = format(rango.fin, 'yyyy-MM-dd');
+
     return await this.appointmentRepository.find({
       where: {
         userId: rango.userId,
-        date: Between(rango.inicio, rango.fin),
+        date: Between(inicioStr, finStr), // ✅ ahora sí es Between<string, string>
         status: 'confirmed',
       },
     });
