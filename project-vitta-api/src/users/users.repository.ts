@@ -87,7 +87,7 @@ export class UsersRepository {
 
     // se comenta por motivos de que al crear un usuario con rol 'user' se envia el mismo DNI
 
-/**    const existeDni = await this.usersRepository.findOne({
+    /**    const existeDni = await this.usersRepository.findOne({
       where: { dni: users.dni },
     });
     if (existeDni) return; */

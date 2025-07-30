@@ -46,11 +46,11 @@ export class UsersController {
 
   @Post('register')
   async createUser(@Body() user: CreateAccountDto) {
-      const newUser = await this.usersService.createUser(user);
-  return {
-    message: 'Usuario creado exitosamente',
-    user: newUser,
-  };
+    const newUser = await this.usersService.createUser(user);
+    return {
+      message: 'Usuario creado exitosamente',
+      user: newUser,
+    };
   }
 
   // 🛑 ESTA RUTA DEBE IR AL FINAL

@@ -25,7 +25,7 @@ export class AuthController {
       'Crea un nuevo usuario con nombre, correo electrónico y contraseña.',
   })
   async signup(@Body() createUser: any) {
-    console.log('prueba12', createUser)
+    console.log('prueba12', createUser);
     return await this.usersService.createUser(createUser);
   }
 

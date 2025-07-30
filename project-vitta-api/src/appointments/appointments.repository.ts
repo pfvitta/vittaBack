@@ -5,12 +5,15 @@ import { Between, Repository } from 'typeorm';
 import { CreateAppointmentDto } from '../common/dtos/createAppointment.dto';
 import { ValidateAppointmentDto } from '../common/dtos/validateAppointment.dto';
 import { format } from 'date-fns';
+import { ProfessionalProfile } from '../common/entities/professionalProfile.entity';
 
 @Injectable()
 export class AppointmentsRepository {
   constructor(
     @InjectRepository(Appointment)
     private appointmentRepository: Repository<Appointment>,
+    @InjectRepository(ProfessionalProfile)
+    private professionalProfileRepository: Repository<ProfessionalProfile>,
   ) {}
 
   async userShiftHistory(userId: string) {
@@ -28,8 +31,16 @@ export class AppointmentsRepository {
   }
 
   async validateAppointmentProfessional(provider: ValidateAppointmentDto) {
+    console.log('validateAppointmentProfessional', provider);
     return await this.appointmentRepository.find({
       where: { professionalId: provider.professionalId, date: provider.date },
+    });
+  }
+
+  async cambioIdProfessional(provider: ValidateAppointmentDto) {
+    return await this.professionalProfileRepository.findOne({
+      where: { user: { id: provider.professionalId } },
+      relations: ['user'],
     });
   }
 

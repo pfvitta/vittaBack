@@ -20,7 +20,7 @@ export class UsersService {
   }
 
   createUser(user: CreateAccountDto) {
-    console.log('llega al service', user)
+    console.log('llega al service', user);
     return this.usersRepository.createUser(user);
   }
 
