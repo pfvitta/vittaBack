@@ -3,8 +3,11 @@ const nodemailer = require('nodemailer');
 
 import { textMails } from './textMails';
 
-export const envioConfirmacion = async (tipoEmail: string, email: string) => {
-  // Configurar el transporte
+export const envioConfirmacion = async (
+  tipoEmail: string,
+  email: string,
+  args?: { title?: string; content?: string; name?: string },
+) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -17,10 +20,9 @@ export const envioConfirmacion = async (tipoEmail: string, email: string) => {
   });
 
   try {
-    // Obtener el contenido del correo
-    const mailOptions = await textMails(tipoEmail, email); // Asegúrate que la función textMails acepte el email
+    // ✅ Aquí usas args para personalizar el correo
+    const mailOptions = await textMails(tipoEmail, email, args);
 
-    // Enviar el correo
     await transporter.sendMail(mailOptions);
     console.log('Email enviado con éxito a:', email);
   } catch (error) {

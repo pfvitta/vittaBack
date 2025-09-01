@@ -1,4 +1,8 @@
-export const textMails = async (tipoEmail: string, email: string) => {
+export const textMails = async (
+  tipoEmail: string,
+  email: string,
+  args?: { title?: string; content?: string; name?: string },
+) => {
   let mailOptions: any = {};
 
   switch (tipoEmail) {
@@ -87,6 +91,22 @@ export const textMails = async (tipoEmail: string, email: string) => {
             <p>Si fue un error o deseas intentarlo de nuevo, puedes volver a ingresar a Vitta y finalizar tu pago.</p><br>
             <p>Atentamente,<br>Equipo Vitta</p>
           `,
+      };
+      break;
+
+    case 'nutrition':
+      mailOptions = {
+        from: '"Vitta Nutrición Semanal" <pfvitta@gmail.com>',
+        to: email,
+        subject: `🧠 Nutrición: ${args?.title || 'Consejo de salud'}`,
+        html: `
+          <h2>Hola, ${args?.name || 'usuario'},</h2>
+          <p>Te compartimos este artículo de salud:</p>
+          ${args?.content || '<p>No hay contenido disponible.</p>'}
+          <p>¡Cuida tu salud! 💪</p>
+          <br>
+          <p>Vitta - Vive con propósito, aliméntate con ciencia.</p>
+        `,
       };
       break;
 

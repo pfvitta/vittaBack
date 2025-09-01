@@ -48,6 +48,31 @@ export class StripeService {
     };
   }
 
+  async createCheckoutSession(email: string) {
+    const session = await this.stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      mode: 'payment',
+      customer_email: email,
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            unit_amount: 4999, // $49.99 en centavos
+            product_data: {
+              name: 'Membresía Premium',
+              description: 'Acceso ilimitado a contenido premium',
+            },
+          },
+          quantity: 1,
+        },
+      ],
+      success_url: `${process.env.CLIENT_URL}/success`,
+      cancel_url: `${process.env.CLIENT_URL}/cancel`,
+    });
+
+    return { url: session.url };
+  }
+
   async handleSuccessfulPayment(intent: Stripe.PaymentIntent): Promise<void> {
     const paymentIntent = (await this.stripe.paymentIntents.retrieve(
       intent.id,
@@ -58,7 +83,7 @@ export class StripeService {
       charges: { data: Stripe.Charge[] };
     };
 
-    const charge = paymentIntent.charges.data[0];
+    const charge = paymentIntent.charges?.data?.[0];
     const email = paymentIntent.receipt_email || charge?.billing_details?.email;
 
     if (!email) {
@@ -119,7 +144,7 @@ export class StripeService {
       charges: { data: Stripe.Charge[] };
     };
 
-    const charge = paymentIntent.charges.data[0];
+    const charge = paymentIntent.charges?.data?.[0];
     const email = paymentIntent.receipt_email || charge?.billing_details?.email;
 
     if (!email) {
@@ -167,6 +192,63 @@ export class StripeService {
     } catch (error) {
       console.error('Error al notificar cancelación:', error);
       throw new InternalServerErrorException('Error al procesar cancelación');
+    }
+  }
+
+  async handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) {
+    const email = session.customer_email;
+
+    if (!email) {
+      console.warn('⚠️ Sesión completada sin correo electrónico');
+      return;
+    }
+
+    const user = await this.userRepository.findOne({
+      where: { email },
+      relations: ['membership'],
+    });
+
+    if (!user) {
+      console.warn('⚠️ Usuario no encontrado con ese email:', email);
+      return;
+    }
+
+    const payment = this.paymentRepository.create({
+      payerEmail: email,
+      stripePaymentIntentId: session.payment_intent as string,
+      amount: '49.99',
+      currency: 'usd',
+      status: 'succeeded',
+      paymentMethod: 'stripe',
+      user,
+    });
+
+    await this.paymentRepository.save(payment);
+
+    const today = new Date();
+    const oneMonthLater = new Date(today);
+    oneMonthLater.setMonth(today.getMonth() + 1);
+
+    let membership = user.membership;
+
+    if (!membership) {
+      membership = this.membershipRepository.create({ user });
+      user.membership = membership; // ✅ actualizar relación
+    }
+
+    membership.status = 'Active';
+    membership.startDate = today;
+    membership.endDate = oneMonthLater;
+    membership.price = 49.99;
+    membership.type = 'mensual';
+
+    await this.membershipRepository.save(membership);
+    await this.userRepository.save(user); // ✅ asegura que user.membership se actualiza
+
+    try {
+      await envioConfirmacion('paymentSuccess', user.email);
+    } catch (err) {
+      console.error('Error enviando correo:', err.message);
     }
   }
 }

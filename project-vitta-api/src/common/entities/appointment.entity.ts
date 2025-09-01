@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from './users.entity';
+import { ProfessionalProfile } from './professionalProfile.entity';
 
 /**
  * Entidad que representa las citas médicas del sistema
@@ -11,23 +19,32 @@ export class Appointment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  // ID del paciente que solicita el turno
-  @Column({ type: 'uuid', nullable: false })
+  @ManyToOne(() => User, (user) => user.appointments)
+  @JoinColumn({ name: 'userId' }) // 🔥 ahora lo enlaza con userId)
+  user: User;
+
+  @ManyToOne(
+    () => ProfessionalProfile,
+    (professionalProfile) => professionalProfile.appointments,
+  )
+  @JoinColumn({ name: 'professionalId' }) // 🔥 ahora lo enlaza con professionalId
+  professional: ProfessionalProfile;
+
+  @Column({ name: 'userId', type: 'uuid' })
   userId: string;
 
-  // ID del profesional que atiende el turno
-  @Column({ type: 'uuid', nullable: false })
+  @Column({ name: 'professionalId', type: 'uuid' })
   professionalId: string;
 
   // Fecha agendada del turno
   @Column({ type: 'date', nullable: false })
-  date: Date;
+  date: string;
 
   // Hora del turno (HH:mm)
   @Column({ type: 'time', nullable: false })
   time: string;
 
   // Estado actual de la cita: 'pending'|'confirmed'|'cancelled'|'completed'
-  @Column({ type: 'varchar', length: 10 })
+  @Column({ type: 'varchar', length: 10, default: 'pending' })
   status: string;
 }

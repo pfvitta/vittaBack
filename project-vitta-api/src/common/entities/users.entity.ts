@@ -11,6 +11,8 @@ import { Membership } from './membership.entity';
 import { ProfessionalProfile } from './professionalProfile.entity';
 import { Specialty } from './specialty.entity';
 import { Files } from './files.entity';
+import { Appointment } from './appointment.entity';
+import { Role } from '../enums/roles.enum';
 
 /**
  * Entidad para usuarios del sistema
@@ -42,7 +44,7 @@ export class User {
   phone: string;
 
   // Número de documento único
-  @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+  @Column({ type: 'varchar', length: 10, nullable: false }) // 'unique: true' se saca esta propiedad por motivos de que al crear un usuario con rol 'user' se envia el mismo DNI
   dni: string;
 
   // Ciudad de residencia
@@ -62,10 +64,14 @@ export class User {
   createAt: Date;
 
   // Rol del usuario (ej: admin, profesional, user)
-  @Column({ type: 'varchar', length: 11, nullable: false })
-  role: string;
+  @Column({ type: 'enum', enum: Role, nullable: false })
+  role: Role;
 
-  @OneToOne(() => Membership, (membership) => membership.user)
+  @OneToOne(() => Membership, (membership) => membership.user, {
+    cascade: true,
+    eager: true,
+  })
+  @JoinColumn()
   membership: Membership;
 
   @OneToOne(
@@ -77,4 +83,7 @@ export class User {
   @OneToOne(() => Files, { cascade: true, eager: true })
   @JoinColumn() // esta decorador indica que esta entidad es la "dueña" de la relación
   file: Files;
+
+  @OneToMany(() => Appointment, (appointment) => appointment.user)
+  appointments: Appointment[];
 }

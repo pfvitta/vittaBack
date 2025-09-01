@@ -12,18 +12,63 @@ import { StripeService } from './stripe.service';
 import { Request, Response } from 'express';
 import Stripe from 'stripe'; // 👈 Importa Stripe como clase por defecto
 import { config } from 'dotenv';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 config({ path: '.env.development' }); // 👈 Carga tus variables de entorno
 
+@ApiTags('Stripe')
 @Controller('stripe')
 export class StripeController {
   constructor(private readonly stripeService: StripeService) {}
 
+  /**
+   * Crea un PaymentIntent clásico (sin redireccionamiento)
+   * @param email - Correo del usuario
+   * @returns PaymentIntent
+   */
   @Post('create-order')
+  @ApiOperation({
+    summary: 'Crear PaymentIntent',
+    description: 'Crea un intento de pago clásico (sin redirección).',
+  })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        email: { type: 'string', example: 'cliente@correo.com' },
+      },
+    },
+  })
   createIntent(@Body('email') email: string) {
     return this.stripeService.createPaymentIntent(49.99, 'usd', email);
   }
 
+  /**
+   * Crea una sesión de pago (Checkout Session)
+   * @param email - Correo del usuario
+   * @returns URL de redirección a Stripe
+   */
+  @Post('create-checkout-session')
+  @ApiOperation({
+    summary: 'Crear sesión de checkout',
+    description: 'Genera una sesión de pago con Stripe Checkout.',
+  })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        email: { type: 'string', example: 'cliente@correo.com' },
+      },
+    },
+  })
+  async createCheckoutSession(@Body('email') email: string) {
+    return this.stripeService.createCheckoutSession(email);
+  }
+
+  /**
+   * Webhook que escucha eventos de Stripe (checkout completado, pagos fallidos, etc.)
+   * Valida la firma y reenvía el evento al StripeService
+   */
   @Post('webhook')
   @HttpCode(200)
   async handleWebhook(
@@ -44,10 +89,17 @@ export class StripeController {
     }
 
     switch (event.type) {
-      case 'payment_intent.succeeded': {
-        const intent = event.data.object as Stripe.PaymentIntent;
-        console.log('✅ Pago exitoso:', intent.id);
-        await this.stripeService.handleSuccessfulPayment(intent);
+      // case 'payment_intent.succeeded': {
+      //   const intent = event.data.object as Stripe.PaymentIntent;
+      //   console.log('✅ Pago exitoso (intent):', intent.id);
+      //   await this.stripeService.handleSuccessfulPayment(intent);
+      //   break;
+      // }
+
+      case 'checkout.session.completed': {
+        const session = event.data.object as Stripe.Checkout.Session;
+        console.log('✅ Sesión completada:', session.id);
+        await this.stripeService.handleCheckoutSessionCompleted(session);
         break;
       }
 
@@ -61,6 +113,7 @@ export class StripeController {
       default:
         console.log(`📦 Evento sin manejar: ${event.type}`);
     }
+
     res.json({ received: true });
   }
 }
